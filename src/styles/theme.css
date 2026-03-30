@@ -48,6 +48,13 @@
   --xross-input-icon-hover: #475569;
   --xross-checkbox-border: #cbd5e1;
 
+  /* Dashboard */
+  --xross-dashboard-title: #1d293d;
+  --xross-dashboard-subtitle: #62748e;
+  --xross-dashboard-nav-inactive: #45556c;
+  --xross-dashboard-status-card-bg: #f1f5f9;
+  --xross-dashboard-online: #009966;
+
   /* Status */
   --xross-status-success: #10b981;
   --xross-status-text: #94a3b8;
@@ -94,6 +101,12 @@
   --color-input-icon: var(--xross-input-icon);
   --color-input-icon-hover: var(--xross-input-icon-hover);
   --color-checkbox-border: var(--xross-checkbox-border);
+
+  --color-dashboard-title: var(--xross-dashboard-title);
+  --color-dashboard-subtitle: var(--xross-dashboard-subtitle);
+  --color-dashboard-nav-inactive: var(--xross-dashboard-nav-inactive);
+  --color-dashboard-status-card-bg: var(--xross-dashboard-status-card-bg);
+  --color-dashboard-online: var(--xross-dashboard-online);
 
   --color-status-success: var(--xross-status-success);
   --color-status-text: var(--xross-status-text);

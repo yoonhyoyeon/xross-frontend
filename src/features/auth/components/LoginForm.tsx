@@ -1,6 +1,8 @@
 import Input from "@/shared/ui/Input";
+import { useNavigate } from "react-router";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   return (
     <div className="flex w-96 flex-col gap-8">
       <div className="flex flex-col gap-2">
@@ -39,6 +41,9 @@ export default function LoginForm() {
         <button
           type="submit"
           className="bg-brand-primary text-brand-on-primary shadow-button hover:bg-brand-primary-hover active:bg-brand-primary-active h-11 rounded-[10px] text-sm font-medium transition-colors"
+          onClick={() => {
+            navigate("/monitoring");
+          }}
         >
           로그인
         </button>
