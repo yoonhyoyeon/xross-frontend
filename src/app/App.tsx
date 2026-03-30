@@ -1,9 +1,8 @@
+import { useRoutes } from "react-router";
+import { routes } from "@/app/routes";
+
 function App() {
-  return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
-  );
+  return useRoutes(routes);
 }
 
 export default App;

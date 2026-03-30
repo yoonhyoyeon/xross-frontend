@@ -1,22 +1,104 @@
+/* 디자인 토큰 — :root 원시값 + @theme에서 Tailwind 유틸로 노출 */
+
 :root {
-  /* --font-size: 16px;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --radius: 0.625rem;
+  /* Brand */
+  --xross-brand-primary: #155dfc;
+  --xross-brand-primary-hover: #1d4ed8;
+  --xross-brand-primary-active: #1e40af;
+  --xross-brand-accent: #60a5fa;
+  --xross-brand-on-primary: #ffffff;
+  --xross-link: #3b82f6;
+  --xross-link-hover: #2563eb;
 
-  --background: #ffffff; */
-}
+  /* Surfaces */
+  --xross-surface-page: #f8fafc;
+  --xross-surface-elevated: #ffffff;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* --background: oklch(0.145 0 0); */
-  }
+  /* Sidebar (로그인 좌측) */
+  --xross-gradient-login-sidebar: linear-gradient(
+    119deg,
+    rgb(29, 41, 61) 0%,
+    rgb(15, 23, 43) 50%,
+    rgb(0, 0, 0) 100%
+  );
+  --xross-sidebar-border: #334155;
+  --xross-sidebar-text: #ffffff;
+  --xross-sidebar-subtitle: #94a3b8;
+  --xross-sidebar-muted: #64748b;
+  --xross-sidebar-footnote: #475569;
+
+  /* Feature cards */
+  --xross-feature-border: rgba(255, 255, 255, 0.1);
+  --xross-feature-bg: rgba(255, 255, 255, 0.05);
+  --xross-feature-title: #e2e8f0;
+  --xross-feature-desc: #64748b;
+  --xross-feature-icon-bg: rgba(43, 127, 255, 0.1);
+  --xross-feature-icon: #60a5fa;
+
+  /* Typography / form */
+  --xross-heading: #0f172a;
+  --xross-body: #64748b;
+  --xross-label: #64748b;
+  --xross-placeholder: #94a3b8;
+  --xross-muted: #94a3b8;
+  --xross-input-border: #e2e8f0;
+  --xross-input-border-email: #dbeafe;
+  --xross-input-focus: #60a5fa;
+  --xross-input-icon: #94a3b8;
+  --xross-input-icon-hover: #475569;
+  --xross-checkbox-border: #cbd5e1;
+
+  /* Status */
+  --xross-status-success: #10b981;
+  --xross-status-text: #94a3b8;
+
+  /* Shadows */
+  --xross-shadow-brand: 0 0 20px rgba(59, 130, 246, 0.3);
+  --xross-shadow-button: 0 4px 15px rgba(59, 130, 246, 0.2);
+  --xross-shadow-status: 0 0 6px rgba(16, 185, 129, 0.5);
 }
 
 @theme inline {
-  /* --color-background: var(--background);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px); */
+  --color-brand-primary: var(--xross-brand-primary);
+  --color-brand-primary-hover: var(--xross-brand-primary-hover);
+  --color-brand-primary-active: var(--xross-brand-primary-active);
+  --color-brand-accent: var(--xross-brand-accent);
+  --color-brand-on-primary: var(--xross-brand-on-primary);
+  --color-link: var(--xross-link);
+  --color-link-hover: var(--xross-link-hover);
+
+  --color-surface-page: var(--xross-surface-page);
+  --color-surface-elevated: var(--xross-surface-elevated);
+
+  --color-sidebar-border: var(--xross-sidebar-border);
+  --color-sidebar-text: var(--xross-sidebar-text);
+  --color-sidebar-subtitle: var(--xross-sidebar-subtitle);
+  --color-sidebar-muted: var(--xross-sidebar-muted);
+  --color-sidebar-footnote: var(--xross-sidebar-footnote);
+
+  --color-feature-border: var(--xross-feature-border);
+  --color-feature-bg: var(--xross-feature-bg);
+  --color-feature-title: var(--xross-feature-title);
+  --color-feature-desc: var(--xross-feature-desc);
+  --color-feature-icon-bg: var(--xross-feature-icon-bg);
+  --color-feature-icon: var(--xross-feature-icon);
+
+  --color-heading: var(--xross-heading);
+  --color-body: var(--xross-body);
+  --color-label: var(--xross-label);
+  --color-placeholder: var(--xross-placeholder);
+  --color-muted: var(--xross-muted);
+  --color-input-border: var(--xross-input-border);
+  --color-input-border-email: var(--xross-input-border-email);
+  --color-input-focus: var(--xross-input-focus);
+  --color-input-icon: var(--xross-input-icon);
+  --color-input-icon-hover: var(--xross-input-icon-hover);
+  --color-checkbox-border: var(--xross-checkbox-border);
+
+  --color-status-success: var(--xross-status-success);
+  --color-status-text: var(--xross-status-text);
+
+  --shadow-brand: var(--xross-shadow-brand);
+  --shadow-button: var(--xross-shadow-button);
+  --shadow-status: var(--xross-shadow-status);
 }
