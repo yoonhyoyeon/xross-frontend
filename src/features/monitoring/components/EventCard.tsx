@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { cn } from "@/shared/lib/utils";
 import type { DetectionEvent } from "@/features/monitoring/types/monitoring.types";
 import EventStatusBadge from "@/features/monitoring/components/EventStatusBadge";
@@ -56,12 +57,17 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
+  const navigate = useNavigate();
   const { Icon: EventIcon, ...style } = SEVERITY_CONFIG[event.severity];
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      onClick={() => navigate(`/monitoring/events/${event.id}`)}
+      onKeyDown={(e) => e.key === "Enter" && navigate(`/monitoring/events/${event.id}`)}
       className={cn(
-        "bg-monitor-card-bg relative rounded-[14px] border p-[14px]",
+        "bg-monitor-card-bg relative cursor-pointer rounded-[14px] border p-[14px] transition-opacity hover:opacity-80",
         style.border,
         style.shadow,
       )}

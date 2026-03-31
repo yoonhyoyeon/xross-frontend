@@ -43,11 +43,11 @@ export default function CameraFeedCard({
                 camera.isOnline ? "bg-[#fb2c36]/76" : "bg-gray-500",
               )}
             />
-            <span className="text-[12px] font-bold leading-4 tracking-[0.3px] text-white drop-shadow-sm">
+            <span className="text-[12px] leading-4 font-bold tracking-[0.3px] text-white drop-shadow-sm">
               {camera.name}
             </span>
           </div>
-          <span className="pl-4 font-mono text-[10px] leading-[15px] tracking-[0.5px] text-monitor-accent-blue">
+          <span className="text-monitor-accent-blue pl-4 font-mono text-[10px] leading-[15px] tracking-[0.5px]">
             {camera.id}
           </span>
         </div>
@@ -55,12 +55,12 @@ export default function CameraFeedCard({
         {/* 상태 배지 */}
         <div className="flex items-center gap-2">
           {camera.isOnline && (
-            <span className="rounded-[4px] border border-monitor-border-strong bg-black/70 px-2 py-[3px] font-mono text-[10px] leading-[15px] text-white">
+            <span className="border-monitor-border-strong rounded-[4px] border bg-black/70 px-2 py-[3px] font-mono text-[10px] leading-[15px] text-white">
               ON
             </span>
           )}
           {camera.isRecording && (
-            <span className="rounded-[4px] border border-[rgba(251,44,54,0.3)] bg-[rgba(251,44,54,0.2)] px-2 py-[3px] font-mono text-[10px] leading-[15px] tracking-[1px] text-event-critical">
+            <span className="text-event-critical rounded-[4px] border border-[rgba(251,44,54,0.3)] bg-[rgba(251,44,54,0.2)] px-2 py-[3px] font-mono text-[10px] leading-[15px] tracking-[1px]">
               REC
             </span>
           )}
@@ -70,7 +70,7 @@ export default function CameraFeedCard({
       {/* 오프라인 상태 표시 */}
       {!camera.isOnline && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-mono text-[12px] text-monitor-text-dim">
+          <span className="text-monitor-text-dim font-mono text-[12px]">
             OFFLINE
           </span>
         </div>

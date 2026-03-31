@@ -13,7 +13,7 @@ export default function MonitoringPage() {
   return (
     <>
       <MonitoringHeader />
-      <main className="flex flex-1 overflow-hidden bg-monitor-bg">
+      <main className="bg-monitor-bg flex flex-1 overflow-hidden">
         {/* 좌측: 카메라 그리드 + 분석 통계 */}
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* 카메라 그리드 */}

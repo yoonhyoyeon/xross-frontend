@@ -4,6 +4,7 @@ import RootLayout from "@/shared/layouts/RootLayout";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import MonitoringPage from "@/features/monitoring/pages/MonitoringPage";
+import EventDetailPage from "@/features/monitoring/pages/EventDetailPage";
 import PosPage from "@/features/pos/pages/PosPage";
 import SettingPage from "@/features/setting/pages/SettingPage";
 
@@ -23,6 +24,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Navigate to="/monitoring" replace /> },
       { path: "monitoring", element: <MonitoringPage /> },
+      { path: "monitoring/events/:id", element: <EventDetailPage /> },
       { path: "pos", element: <PosPage /> },
       { path: "settings", element: <SettingPage /> },
     ],
