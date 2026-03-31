@@ -55,6 +55,20 @@
   --xross-dashboard-status-card-bg: #f1f5f9;
   --xross-dashboard-online: #009966;
 
+  /* Monitoring (dark canvas) */
+  --xross-monitor-bg: #0f172b;
+  --xross-monitor-card-bg: #020618;
+  --xross-monitor-border: #1d293d;
+  --xross-monitor-border-strong: #314158;
+  --xross-monitor-text: #e2e8f0;
+  --xross-monitor-text-muted: #90a1b9;
+  --xross-monitor-text-dim: #62748e;
+  --xross-monitor-accent-blue: #51a2ff;
+  --xross-monitor-accent-green: #00d492;
+  --xross-event-critical: #ff6467;
+  --xross-event-warning: #fe9a00;
+  --xross-event-safe: #00bc7d;
+
   /* Status */
   --xross-status-success: #10b981;
   --xross-status-text: #94a3b8;
@@ -107,6 +121,19 @@
   --color-dashboard-nav-inactive: var(--xross-dashboard-nav-inactive);
   --color-dashboard-status-card-bg: var(--xross-dashboard-status-card-bg);
   --color-dashboard-online: var(--xross-dashboard-online);
+
+  --color-monitor-bg: var(--xross-monitor-bg);
+  --color-monitor-card-bg: var(--xross-monitor-card-bg);
+  --color-monitor-border: var(--xross-monitor-border);
+  --color-monitor-border-strong: var(--xross-monitor-border-strong);
+  --color-monitor-text: var(--xross-monitor-text);
+  --color-monitor-text-muted: var(--xross-monitor-text-muted);
+  --color-monitor-text-dim: var(--xross-monitor-text-dim);
+  --color-monitor-accent-blue: var(--xross-monitor-accent-blue);
+  --color-monitor-accent-green: var(--xross-monitor-accent-green);
+  --color-event-critical: var(--xross-event-critical);
+  --color-event-warning: var(--xross-event-warning);
+  --color-event-safe: var(--xross-event-safe);
 
   --color-status-success: var(--xross-status-success);
   --color-status-text: var(--xross-status-text);
