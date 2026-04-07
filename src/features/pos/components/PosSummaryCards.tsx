@@ -29,7 +29,7 @@ function SummaryCard({
 }: SummaryCardProps) {
   return (
     <div
-      className={`flex flex-1 flex-col gap-0 rounded-xl border px-[17px] py-[17px] ${borderClass} ${bgClass}`}
+      className={`flex flex-col gap-0 rounded-xl border px-3 py-3 sm:px-[17px] sm:py-[17px] ${borderClass} ${bgClass}`}
     >
       {/* 제목 + 아이콘 */}
       <div className="flex items-center justify-between">
@@ -44,7 +44,7 @@ function SummaryCard({
       </div>
       {/* 수치 */}
       <div className="mt-[9px]">
-        <span className="text-monitor-text text-[22px] leading-7 font-bold tracking-[-0.3px]">
+        <span className="text-monitor-text text-[16px] leading-6 font-bold tracking-[-0.3px] sm:text-[22px] sm:leading-7">
           {value}
         </span>
       </div>
@@ -64,7 +64,7 @@ interface PosSummaryCardsProps {
 
 export default function PosSummaryCards({ stats }: PosSummaryCardsProps) {
   return (
-    <div className="flex gap-[12px]">
+    <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
       <SummaryCard
         icon={<ReceiptIcon className="h-full w-full" aria-hidden />}
         title="총 거래"

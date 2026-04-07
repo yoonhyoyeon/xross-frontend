@@ -15,7 +15,7 @@ export default function EventCCTVPlayer({
   const isLive = playbackPercent >= 99.5;
 
   return (
-    <div className="border-monitor-border relative flex flex-1 overflow-hidden border-r bg-black">
+    <div className="border-monitor-border relative flex min-h-[250px] flex-1 overflow-hidden bg-black sm:min-h-[300px] md:border-r">
       {/* 카메라 피드 영역 */}
       <div className="absolute inset-0 bg-[#0f172b]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1a2744_0%,#0a0f1e_100%)]" />
@@ -56,7 +56,7 @@ export default function EventCCTVPlayer({
 
         {/* 컨트롤 로우 */}
         <div className="mx-5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
             <button
               className="text-monitor-text-muted hover:text-monitor-text transition-colors"
               aria-label="이전 프레임"
@@ -65,10 +65,10 @@ export default function EventCCTVPlayer({
             </button>
 
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20 sm:h-10 sm:w-10"
               aria-label="일시정지"
             >
-              <PauseIcon className="h-5 w-5 text-white" />
+              <PauseIcon className="h-4 w-4 text-white sm:h-5 sm:w-5" />
             </button>
 
             <button
@@ -78,8 +78,8 @@ export default function EventCCTVPlayer({
               <SkipForwardIcon className="h-5 w-5" />
             </button>
 
-            <div className="border-monitor-border-strong h-4 border-l" />
-            <span className="text-monitor-text font-mono text-[12px] leading-4">
+            <div className="border-monitor-border-strong hidden h-4 border-l sm:block" />
+            <span className="text-monitor-text font-mono text-[11px] leading-4 sm:text-[12px]">
               {timestamp}
             </span>
             <div

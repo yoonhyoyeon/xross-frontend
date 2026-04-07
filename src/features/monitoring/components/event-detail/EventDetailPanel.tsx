@@ -36,13 +36,13 @@ export default function EventDetailPanel({ event }: EventDetailPanelProps) {
   const { Icon, iconColor } = SEVERITY_CONFIG[event.severity];
 
   return (
-    <div className="flex h-full w-[540px] shrink-0 flex-col overflow-hidden border-l border-monitor-border bg-monitor-bg">
+    <div className="flex w-full shrink-0 flex-col overflow-hidden border-t border-monitor-border bg-monitor-bg md:h-full md:w-[540px] md:border-l md:border-t-0">
       {/* 이벤트 제목 섹션 */}
-      <div className="shrink-0 border-b border-monitor-border bg-monitor-card-bg px-6 pb-1 pt-6">
+      <div className="shrink-0 border-b border-monitor-border bg-monitor-card-bg px-4 pb-1 pt-4 sm:px-6 sm:pt-6">
         <div className="mb-2 flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-1 items-start gap-[10px]">
             <Icon className={`mt-[2px] h-6 w-6 shrink-0 ${iconColor}`} />
-            <h2 className="text-[20px] font-bold leading-[25px] tracking-[-0.45px] text-monitor-text">
+            <h2 className="text-[16px] font-bold leading-[22px] tracking-[-0.45px] text-monitor-text sm:text-[20px] sm:leading-[25px]">
               {event.title}
             </h2>
           </div>

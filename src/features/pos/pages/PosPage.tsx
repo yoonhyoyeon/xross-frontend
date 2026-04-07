@@ -58,7 +58,7 @@ export default function PosPage() {
     <>
       <PosHeader />
       <main className="bg-monitor-bg flex flex-1 flex-col overflow-auto">
-        <div className="mx-auto w-full max-w-[1152px] px-6 py-6">
+        <div className="mx-auto w-full max-w-[1152px] px-3 py-4 sm:px-6 sm:py-6">
           {/* 요약 카드 */}
           <PosSummaryCards stats={MOCK_POS_SUMMARY} />
 

@@ -11,8 +11,8 @@ export default function EventDetailActions({
   onAlert,
 }: EventDetailActionsProps) {
   return (
-    <div className="shrink-0 border-t border-monitor-border bg-monitor-card-bg px-6 py-4">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="shrink-0 border-t border-monitor-border bg-monitor-card-bg px-4 py-3 sm:px-6 sm:py-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
         <button
           onClick={onDismiss}
           className="flex items-center justify-center gap-2 rounded-[12px] border border-monitor-border bg-monitor-bg px-4 py-3 transition-colors hover:border-monitor-border-strong hover:bg-monitor-border"

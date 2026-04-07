@@ -56,7 +56,7 @@ export default function PosSearchBar({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
       {/* 검색창 */}
       <div className="relative flex-1">
         <SearchIcon className="text-monitor-text-dim pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
@@ -69,34 +69,37 @@ export default function PosSearchBar({
         />
       </div>
 
-      {/* 날짜 범위 선택 */}
-      <DateRangePicker
-        value={filters.dateRange}
-        onChange={(range) => onChange({ ...filters, dateRange: range })}
-        open={openDropdown === "date"}
-        onToggle={() => handleDropdownToggle("date")}
-        onClose={handleDropdownClose}
-      />
+      {/* 필터 그룹 */}
+      <div className="flex flex-wrap items-center gap-2">
+        {/* 날짜 범위 선택 */}
+        <DateRangePicker
+          value={filters.dateRange}
+          onChange={(range) => onChange({ ...filters, dateRange: range })}
+          open={openDropdown === "date"}
+          onToggle={() => handleDropdownToggle("date")}
+          onClose={handleDropdownClose}
+        />
 
-      {/* 상태 필터 */}
-      <FilterDropdown
-        value={filters.status}
-        options={STATUS_OPTIONS}
-        onChange={(v) => onChange({ ...filters, status: v })}
-        open={openDropdown === "status"}
-        onToggle={() => handleDropdownToggle("status")}
-        onClose={handleDropdownClose}
-      />
+        {/* 상태 필터 */}
+        <FilterDropdown
+          value={filters.status}
+          options={STATUS_OPTIONS}
+          onChange={(v) => onChange({ ...filters, status: v })}
+          open={openDropdown === "status"}
+          onToggle={() => handleDropdownToggle("status")}
+          onClose={handleDropdownClose}
+        />
 
-      {/* 결제 수단 필터 */}
-      <FilterDropdown
-        value={filters.payment}
-        options={PAYMENT_OPTIONS}
-        onChange={(v) => onChange({ ...filters, payment: v })}
-        open={openDropdown === "payment"}
-        onToggle={() => handleDropdownToggle("payment")}
-        onClose={handleDropdownClose}
-      />
+        {/* 결제 수단 필터 */}
+        <FilterDropdown
+          value={filters.payment}
+          options={PAYMENT_OPTIONS}
+          onChange={(v) => onChange({ ...filters, payment: v })}
+          open={openDropdown === "payment"}
+          onToggle={() => handleDropdownToggle("payment")}
+          onClose={handleDropdownClose}
+        />
+      </div>
     </div>
   );
 }

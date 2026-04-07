@@ -40,7 +40,7 @@ export default function EventDetailTimeline({
   entries,
 }: EventDetailTimelineProps) {
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-6">
+    <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
       {/* 섹션 헤더 */}
       <div className="mb-6 flex items-center gap-[8px]">
         <LogsIcon className="h-4 w-4 shrink-0 text-monitor-text-dim" />

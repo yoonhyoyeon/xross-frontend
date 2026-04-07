@@ -40,9 +40,9 @@ function TransactionDetail({ tx }: TransactionDetailProps) {
           isUnpaid ? "bg-[rgba(251,44,54,0.06)]" : "bg-[rgba(255,255,255,0.03)]"
         }`}
       >
-        <div className="flex gap-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-8">
           {/* 구매 상품 */}
-          <div className="flex-1">
+          <div className="flex-1 overflow-x-auto">
             <p className="text-monitor-text-dim mb-[9px] text-[11px] font-medium tracking-wider uppercase">
               구매 상품
             </p>
@@ -102,7 +102,7 @@ function TransactionDetail({ tx }: TransactionDetailProps) {
           </div>
 
           {/* 상세 정보 */}
-          <div className="w-[224px] shrink-0">
+          <div className="w-full shrink-0 sm:w-[224px]">
             <p className="text-monitor-text-dim mb-[8px] text-[11px] font-medium tracking-wider uppercase">
               상세 정보
             </p>
@@ -285,38 +285,40 @@ export default function PosTransactionTable({
 
   return (
     <div className="border-monitor-border bg-monitor-card-bg overflow-hidden rounded-xl border">
-      <table className="w-full border-collapse">
-        {/* 헤더 */}
-        <thead>
-          <tr className="border-monitor-border bg-[rgba(255,255,255,0.04)] border-b">
-            {COL_HEADERS.map((col, i) => (
-              <th
-                key={i}
-                className={`text-monitor-text-dim px-4 py-[10px] text-[11px] font-medium tracking-wider uppercase ${
-                  col.align === "right" ? "text-right" : "text-left"
-                } ${i === COL_HEADERS.length - 1 ? "w-12" : ""}`}
-              >
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px] border-collapse">
+          {/* 헤더 */}
+          <thead>
+            <tr className="border-monitor-border bg-[rgba(255,255,255,0.04)] border-b">
+              {COL_HEADERS.map((col, i) => (
+                <th
+                  key={i}
+                  className={`text-monitor-text-dim px-4 py-[10px] text-[11px] font-medium tracking-wider uppercase ${
+                    col.align === "right" ? "text-right" : "text-left"
+                  } ${i === COL_HEADERS.length - 1 ? "w-12" : ""}`}
+                >
+                  {col.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
 
-        {/* 바디 */}
-        <tbody>
-          {transactions.map((tx) => (
-            <TransactionRow
-              key={tx.id}
-              tx={tx}
-              isExpanded={expandedIds.has(tx.id)}
-              onToggle={() => handleToggle(tx.id)}
-            />
-          ))}
-        </tbody>
-      </table>
+          {/* 바디 */}
+          <tbody>
+            {transactions.map((tx) => (
+              <TransactionRow
+                key={tx.id}
+                tx={tx}
+                isExpanded={expandedIds.has(tx.id)}
+                onToggle={() => handleToggle(tx.id)}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* 푸터 */}
-      <div className="border-monitor-border flex items-center justify-between border-t px-4 py-[10px]">
+      <div className="border-monitor-border flex flex-col items-start gap-1 border-t px-4 py-[10px] sm:flex-row sm:items-center sm:justify-between sm:gap-0">
         <span className="text-monitor-text-dim text-[12px]">
           {transactions.length}건 표시 중 (전체 {totalCount}건)
         </span>

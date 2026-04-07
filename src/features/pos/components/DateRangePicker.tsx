@@ -101,7 +101,7 @@ function CalendarMonth({ year, month, range, hoverDate, onSelect, onHover }: Cal
   }
 
   return (
-    <div className="w-[224px]">
+    <div className="w-full sm:w-[224px]">
       <div className="mb-2 text-center text-[13px] font-semibold text-monitor-text">
         {year}년 {MONTH_NAMES[month]}
       </div>
@@ -204,11 +204,11 @@ export default function DateRangePicker({
       </button>
 
       {open && (
-        <div className="border-monitor-border bg-monitor-card-bg absolute right-0 top-[calc(100%+4px)] z-50 rounded-xl border p-4 shadow-xl">
-          <div className="flex gap-4">
+        <div className="border-monitor-border bg-monitor-card-bg fixed inset-x-2 top-1/2 z-50 -translate-y-1/2 rounded-xl border p-4 shadow-xl sm:inset-x-auto sm:translate-y-0 sm:absolute sm:right-0 sm:top-[calc(100%+4px)]">
+          <div className="flex flex-col gap-4 sm:flex-row sm:gap-4">
             {/* 프리셋 */}
-            <div className="border-monitor-border flex w-[110px] shrink-0 flex-col gap-0.5 border-r pr-4">
-              <span className="text-monitor-text-dim mb-2 text-[10px] font-semibold tracking-wider uppercase">
+            <div className="border-monitor-border flex shrink-0 flex-row gap-1 overflow-x-auto border-b pb-3 sm:w-[110px] sm:flex-col sm:gap-0.5 sm:overflow-x-visible sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
+              <span className="text-monitor-text-dim mb-1 hidden text-[10px] font-semibold tracking-wider uppercase sm:mb-2 sm:block">
                 프리셋
               </span>
               {PRESETS.map((p) => {
@@ -220,7 +220,7 @@ export default function DateRangePicker({
                     key={p.label}
                     type="button"
                     onClick={() => handlePreset(preset)}
-                    className={`rounded-md px-2 py-1.5 text-left text-[12px] transition-colors ${
+                    className={`shrink-0 rounded-md px-2 py-1.5 text-left text-[12px] transition-colors whitespace-nowrap ${
                       active
                         ? "bg-[rgba(81,162,255,0.12)] text-monitor-accent-blue font-medium"
                         : "text-monitor-text-muted hover:bg-[rgba(255,255,255,0.05)] hover:text-monitor-text"
@@ -232,7 +232,7 @@ export default function DateRangePicker({
               })}
             </div>
 
-            {/* 달력 2개 */}
+            {/* 달력 */}
             <div>
               <div className="mb-3 flex items-center justify-between">
                 <button
@@ -250,7 +250,7 @@ export default function DateRangePicker({
                   ›
                 </button>
               </div>
-              <div className="flex gap-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
                 <CalendarMonth
                   year={viewYear}
                   month={viewMonth}

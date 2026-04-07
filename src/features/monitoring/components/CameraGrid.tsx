@@ -2,16 +2,89 @@ import { useState } from "react";
 import CameraFeedCard from "@/features/monitoring/components/CameraFeedCard";
 import type { CameraFeed } from "@/features/monitoring/types/monitoring.types";
 
-const PAGE_SIZE = 4;
+const DESKTOP_PAGE_SIZE = 4;
 
 interface CameraGridProps {
   cameras: CameraFeed[];
 }
 
 export default function CameraGrid({ cameras }: CameraGridProps) {
+  return (
+    <>
+      {/* 모바일: 1개씩 스와이프 */}
+      <div className="flex h-full flex-col md:hidden">
+        <MobileCarousel cameras={cameras} />
+      </div>
+
+      {/* md+: 기존 그리드 레이아웃 */}
+      <div className="hidden h-full md:block">
+        <DesktopGrid cameras={cameras} />
+      </div>
+    </>
+  );
+}
+
+/* ── 모바일 캐러셀: 1개씩 페이지네이션 ───────── */
+function MobileCarousel({ cameras }: { cameras: CameraFeed[] }) {
+  const [idx, setIdx] = useState(0);
   const count = cameras.length;
 
-  // 카메라 1개: 전체 너비 단일 뷰
+  if (count === 0) return null;
+
+  return (
+    <>
+      <div className="min-h-0 flex-1 p-2">
+        <CameraFeedCard camera={cameras[idx]} className="h-full" />
+      </div>
+
+      {count > 1 && (
+        <div className="flex shrink-0 items-center justify-center gap-3 pb-2 pt-1">
+          <button
+            onClick={() => setIdx((i) => i - 1)}
+            disabled={idx === 0}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-monitor-border text-[16px] text-monitor-text-muted transition-colors hover:border-monitor-border-strong hover:text-monitor-text disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="이전 카메라"
+          >
+            ‹
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {cameras.map((cam, i) => (
+              <button
+                key={cam.id}
+                onClick={() => setIdx(i)}
+                className={
+                  i === idx
+                    ? "h-2 w-5 rounded-full bg-monitor-accent-blue transition-all"
+                    : "h-2 w-2 rounded-full bg-monitor-border-strong transition-all hover:bg-monitor-text-muted"
+                }
+                aria-label={`${cam.name}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => setIdx((i) => i + 1)}
+            disabled={idx === count - 1}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-monitor-border text-[16px] text-monitor-text-muted transition-colors hover:border-monitor-border-strong hover:text-monitor-text disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="다음 카메라"
+          >
+            ›
+          </button>
+
+          <span className="ml-1 font-mono text-[11px] text-monitor-text-dim">
+            {idx + 1}/{count}
+          </span>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ── 데스크톱 그리드 ─────────────────────────── */
+function DesktopGrid({ cameras }: { cameras: CameraFeed[] }) {
+  const count = cameras.length;
+
   if (count === 1) {
     return (
       <div className="h-full p-4">
@@ -20,7 +93,6 @@ export default function CameraGrid({ cameras }: CameraGridProps) {
     );
   }
 
-  // 카메라 2개: 좌우 분할
   if (count === 2) {
     return (
       <div className="grid h-full grid-cols-2 gap-4 p-4">
@@ -31,7 +103,6 @@ export default function CameraGrid({ cameras }: CameraGridProps) {
     );
   }
 
-  // 카메라 3개: 좌측 1개(전체 높이) + 우측 2개 세로 분할
   if (count === 3) {
     return (
       <div className="grid h-full grid-cols-2 gap-4 p-4">
@@ -44,7 +115,6 @@ export default function CameraGrid({ cameras }: CameraGridProps) {
     );
   }
 
-  // 카메라 4개: 2×2 고정 그리드
   if (count === 4) {
     return (
       <div className="grid h-full grid-cols-2 grid-rows-2 gap-4 p-4">
@@ -55,14 +125,16 @@ export default function CameraGrid({ cameras }: CameraGridProps) {
     );
   }
 
-  // 카메라 5개 이상: 2×2 그리드 + 페이지네이션
-  return <PaginatedGrid cameras={cameras} />;
+  return <DesktopPaginatedGrid cameras={cameras} />;
 }
 
-function PaginatedGrid({ cameras }: { cameras: CameraFeed[] }) {
+function DesktopPaginatedGrid({ cameras }: { cameras: CameraFeed[] }) {
   const [page, setPage] = useState(0);
-  const totalPages = Math.ceil(cameras.length / PAGE_SIZE);
-  const paged = cameras.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  const totalPages = Math.ceil(cameras.length / DESKTOP_PAGE_SIZE);
+  const paged = cameras.slice(
+    page * DESKTOP_PAGE_SIZE,
+    (page + 1) * DESKTOP_PAGE_SIZE,
+  );
 
   return (
     <div className="flex h-full flex-col">
@@ -72,7 +144,6 @@ function PaginatedGrid({ cameras }: { cameras: CameraFeed[] }) {
         ))}
       </div>
 
-      {/* 페이지네이션 */}
       <div className="flex shrink-0 items-center justify-center gap-3 pb-3">
         <button
           onClick={() => setPage((p) => p - 1)}
@@ -82,7 +153,6 @@ function PaginatedGrid({ cameras }: { cameras: CameraFeed[] }) {
         >
           ‹
         </button>
-
         <div className="flex items-center gap-1.5">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
@@ -97,7 +167,6 @@ function PaginatedGrid({ cameras }: { cameras: CameraFeed[] }) {
             />
           ))}
         </div>
-
         <button
           onClick={() => setPage((p) => p + 1)}
           disabled={page === totalPages - 1}

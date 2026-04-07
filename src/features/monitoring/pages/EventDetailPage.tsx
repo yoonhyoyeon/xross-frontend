@@ -18,7 +18,7 @@ export default function EventDetailPage() {
     <div className="flex h-full flex-col overflow-hidden bg-monitor-card-bg">
       <EventDetailHeader eventId={event.id} />
 
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex flex-1 flex-col overflow-auto md:flex-row md:overflow-hidden">
         <EventCCTVPlayer
           cameraName={event.cameraName}
           timestamp={event.timestamp}

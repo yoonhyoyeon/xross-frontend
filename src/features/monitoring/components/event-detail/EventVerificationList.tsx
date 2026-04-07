@@ -73,7 +73,7 @@ export default function EventVerificationList({
   items,
 }: EventVerificationListProps) {
   return (
-    <div className="border-monitor-border border-b px-6 py-6">
+    <div className="border-monitor-border border-b px-4 py-4 sm:px-6 sm:py-6">
       {/* 섹션 헤더 */}
       <div className="mb-4 flex items-center gap-[8px]">
         <GitCompareIcon className="text-monitor-text-dim h-4 w-4 shrink-0" />

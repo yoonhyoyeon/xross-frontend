@@ -12,12 +12,16 @@ interface AnalyticsChartProps {
   data: AnalyticsDataPoint[];
 }
 
+function formatTick(value: string): string {
+  return value.replace(":00", "시");
+}
+
 export default function AnalyticsChart({ data }: AnalyticsChartProps) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart
         data={data}
-        margin={{ top: 5, right: 16, left: 16, bottom: 20 }}
+        margin={{ top: 5, right: 8, left: 8, bottom: 20 }}
       >
         <defs>
           <linearGradient id="pickGradient" x1="0" y1="0" x2="0" y2="1">
@@ -43,8 +47,10 @@ export default function AnalyticsChart({ data }: AnalyticsChartProps) {
             fontSize: 10,
             fontFamily: "ui-monospace, Menlo, monospace",
           }}
+          tickFormatter={formatTick}
           dy={6}
-          interval={0}
+          interval="preserveStartEnd"
+          minTickGap={30}
         />
         <Tooltip
           contentStyle={{

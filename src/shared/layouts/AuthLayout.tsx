@@ -28,9 +28,9 @@ const FEATURE_CARDS: FeatureCardProps[] = [
 export default function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
-      {/* 좌측 브랜딩 패널 */}
+      {/* 좌측 브랜딩 패널 — 태블릿 이하 숨김 */}
       <aside
-        className="border-sidebar-border relative flex w-[540px] shrink-0 flex-col justify-between border-r p-10"
+        className="border-sidebar-border relative hidden w-[540px] shrink-0 flex-col justify-between border-r p-10 lg:flex"
         style={{ backgroundImage: "var(--xross-gradient-login-sidebar)" }}
       >
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]" />
@@ -73,7 +73,7 @@ export default function AuthLayout() {
       </aside>
 
       {/* 우측 콘텐츠 영역 */}
-      <main className="bg-surface-page flex flex-1 items-center justify-center">
+      <main className="bg-surface-page flex flex-1 items-center justify-center px-4 sm:px-6">
         <Outlet />
       </main>
     </div>

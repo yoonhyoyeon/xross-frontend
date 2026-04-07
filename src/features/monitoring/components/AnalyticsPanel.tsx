@@ -12,6 +12,8 @@ interface AnalyticsStat {
 interface AnalyticsPanelProps {
   stats: AnalyticsStat[];
   chartData: AnalyticsDataPoint[];
+  /** 모바일 탭에서 독립 뷰로 표시될 때 true */
+  standalone?: boolean;
 }
 
 const STAT_VALUE_COLOR = {
@@ -23,11 +25,17 @@ const STAT_VALUE_COLOR = {
 export default function AnalyticsPanel({
   stats,
   chartData,
+  standalone,
 }: AnalyticsPanelProps) {
   return (
-    <div className="border-monitor-border bg-monitor-bg flex shrink-0 flex-col border-t px-4 pt-4">
+    <div
+      className={cn(
+        "border-monitor-border bg-monitor-bg flex flex-col px-4 pt-4",
+        standalone ? "pb-4" : "shrink-0 border-t",
+      )}
+    >
       {/* 헤더 */}
-      <div className="flex items-center justify-between">
+      <div className="shrink-0 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="text-monitor-text-muted flex items-center gap-[6px]">
           <ChartAnalyticsIcon className="h-5 w-5 shrink-0" />
           <span className="text-[12px] leading-4 font-bold tracking-[1.2px] uppercase">
@@ -36,13 +44,13 @@ export default function AnalyticsPanel({
         </div>
 
         {/* 통계 수치 */}
-        <div className="flex items-start gap-6">
+        <div className="flex flex-wrap items-start gap-4 sm:gap-6">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
               className={cn(
                 "flex flex-col items-end",
-                i > 0 && "border-monitor-border-strong border-l pl-6",
+                i > 0 && "border-monitor-border-strong border-l pl-4 sm:pl-6",
               )}
             >
               <span className="text-monitor-text-dim font-mono text-[11px] leading-[16.5px]">
@@ -61,8 +69,13 @@ export default function AnalyticsPanel({
         </div>
       </div>
 
-      {/* 차트 */}
-      <div className="mt-3 h-[132px] min-w-0">
+      {/* 차트 — standalone일 때 적절한 높이, 아닐 때 고정 높이 */}
+      <div
+        className={cn(
+          "mt-3 min-w-0",
+          standalone ? "h-[240px] sm:h-[300px]" : "h-[132px]",
+        )}
+      >
         <AnalyticsChart data={chartData} />
       </div>
     </div>
