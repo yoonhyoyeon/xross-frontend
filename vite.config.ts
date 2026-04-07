@@ -6,7 +6,19 @@ import path from "node:path";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), svgr()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgr({
+      // `?react` 쿼리가 붙은 SVG만 React 컴포넌트로 변환
+      include: "**/*.svg?react",
+      svgrOptions: {
+        exportType: "default",
+        ref: true,
+        titleProp: true,
+      },
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
