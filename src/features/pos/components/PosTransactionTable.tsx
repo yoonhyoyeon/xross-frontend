@@ -47,7 +47,9 @@ function TransactionDetail({ tx }: TransactionDetailProps) {
               구매 상품
             </p>
             {tx.items.length === 0 ? (
-              <p className="text-monitor-text-muted text-[13px]">결제된 상품 없음</p>
+              <p className="text-monitor-text-muted text-[13px]">
+                결제된 상품 없음
+              </p>
             ) : (
               <table className="w-full max-w-[814px]">
                 <thead>
@@ -135,7 +137,9 @@ function TransactionDetail({ tx }: TransactionDetailProps) {
                 >
                   <p
                     className={`text-[11px] leading-[17px] ${
-                      tx.status === "unpaid" ? "text-[#ff6467]" : "text-event-warning"
+                      tx.status === "unpaid"
+                        ? "text-[#ff6467]"
+                        : "text-event-warning"
                     }`}
                   >
                     {tx.note}
@@ -212,7 +216,9 @@ function TransactionRow({ tx, isExpanded, onToggle }: TransactionRowProps) {
 
         {/* 금액 */}
         <td className="px-4 py-[12.5px] text-right">
-          <span className="text-[15px] leading-5">{formatAmount(tx.amount)}</span>
+          <span className="text-[15px] leading-5">
+            {formatAmount(tx.amount)}
+          </span>
         </td>
 
         {/* 상태 */}
@@ -289,7 +295,7 @@ export default function PosTransactionTable({
         <table className="w-full min-w-[700px] border-collapse">
           {/* 헤더 */}
           <thead>
-            <tr className="border-monitor-border bg-[rgba(255,255,255,0.04)] border-b">
+            <tr className="border-monitor-border border-b bg-[rgba(255,255,255,0.04)]">
               {COL_HEADERS.map((col, i) => (
                 <th
                   key={i}

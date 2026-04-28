@@ -39,10 +39,7 @@ interface PosSearchBarProps {
   onChange: (filters: PosFilters) => void;
 }
 
-export default function PosSearchBar({
-  filters,
-  onChange,
-}: PosSearchBarProps) {
+export default function PosSearchBar({ filters, onChange }: PosSearchBarProps) {
   const [openDropdown, setOpenDropdown] = useState<OpenDropdownKey | null>(
     null,
   );

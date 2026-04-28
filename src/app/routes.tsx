@@ -7,6 +7,10 @@ import MonitoringPage from "@/features/monitoring/pages/MonitoringPage";
 import EventDetailPage from "@/features/monitoring/pages/EventDetailPage";
 import PosPage from "@/features/pos/pages/PosPage";
 import SettingPage from "@/features/setting/pages/SettingPage";
+import AccountTab from "@/features/setting/pages/AccountTab";
+import NotificationTab from "@/features/setting/pages/NotificationTab";
+import StoreTab from "@/features/setting/pages/StoreTab";
+import SystemTab from "@/features/setting/pages/SystemTab";
 
 export const routes: RouteObject[] = [
   {
@@ -26,7 +30,17 @@ export const routes: RouteObject[] = [
       { path: "monitoring", element: <MonitoringPage /> },
       { path: "monitoring/events/:id", element: <EventDetailPage /> },
       { path: "pos", element: <PosPage /> },
-      { path: "settings", element: <SettingPage /> },
+      {
+        path: "settings",
+        element: <SettingPage />,
+        children: [
+          { index: true, element: <Navigate to="account" replace /> },
+          { path: "account", element: <AccountTab /> },
+          { path: "notification", element: <NotificationTab /> },
+          { path: "store", element: <StoreTab /> },
+          { path: "system", element: <SystemTab /> },
+        ],
+      },
     ],
   },
   {

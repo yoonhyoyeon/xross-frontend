@@ -36,8 +36,8 @@ export default function MonitoringPage() {
 
       {/* ── 모바일/태블릿: 탭 전환 ──────────────── */}
       <div className="flex flex-1 flex-col overflow-hidden lg:hidden">
-        {/* 세그먼트 탭 바 */}
-        <div className="bg-monitor-bg shrink-0 px-3 pt-3 pb-2">
+        {/* 세그먼트 탭 바 — 설정 페이지 모바일 탭과 동일 스타일 */}
+        <div className="border-monitor-border bg-monitor-bg shrink-0 border-b px-3 py-2.5">
           <div className="flex gap-1 rounded-xl bg-[rgba(255,255,255,0.06)] p-1">
             {MOBILE_TABS.map(({ key, label, Icon }) => {
               const active = mobileTab === key;
@@ -47,13 +47,22 @@ export default function MonitoringPage() {
                   type="button"
                   onClick={() => setMobileTab(key)}
                   className={cn(
-                    "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[12px] font-semibold tracking-[0.3px] transition-all",
+                    "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[11px] font-semibold tracking-[0.2px] transition-all",
                     active
-                      ? "bg-monitor-card-bg text-monitor-accent-blue shadow-sm"
+                      ? "bg-monitor-card-bg text-monitor-accent-blue"
                       : "text-monitor-text-dim hover:text-monitor-text-muted",
                   )}
                 >
-                  <Icon className="h-3.5 w-3.5" />
+                  <span
+                    className="relative size-3.5 shrink-0"
+                    style={
+                      {
+                        color: active ? "#51a2ff" : "#62748e",
+                      } as React.CSSProperties
+                    }
+                  >
+                    <Icon className="absolute block size-full max-w-none" />
+                  </span>
                   {label}
                   {key === "events" && criticalCount > 0 && (
                     <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-event-critical px-1 text-[8px] font-bold leading-none text-white">

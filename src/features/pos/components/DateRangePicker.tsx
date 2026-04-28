@@ -29,17 +29,51 @@ function formatLabel(range: DateRange): string {
 
 const PRESETS: { label: string; get: () => DateRange }[] = [
   { label: "전체 기간", get: () => ({ from: null, to: null }) },
-  { label: "오늘", get: () => { const d = toKR(new Date()); return { from: d, to: d }; } },
-  { label: "어제", get: () => { const d = toKR(new Date(Date.now() - 86400000)); return { from: d, to: d }; } },
-  { label: "최근 7일", get: () => ({ from: toKR(new Date(Date.now() - 6 * 86400000)), to: toKR(new Date()) }) },
-  { label: "최근 30일", get: () => ({ from: toKR(new Date(Date.now() - 29 * 86400000)), to: toKR(new Date()) }) },
+  {
+    label: "오늘",
+    get: () => {
+      const d = toKR(new Date());
+      return { from: d, to: d };
+    },
+  },
+  {
+    label: "어제",
+    get: () => {
+      const d = toKR(new Date(Date.now() - 86400000));
+      return { from: d, to: d };
+    },
+  },
+  {
+    label: "최근 7일",
+    get: () => ({
+      from: toKR(new Date(Date.now() - 6 * 86400000)),
+      to: toKR(new Date()),
+    }),
+  },
+  {
+    label: "최근 30일",
+    get: () => ({
+      from: toKR(new Date(Date.now() - 29 * 86400000)),
+      to: toKR(new Date()),
+    }),
+  },
 ];
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 const MONTH_NAMES = [
-  "1월", "2월", "3월", "4월", "5월", "6월",
-  "7월", "8월", "9월", "10월", "11월", "12월",
+  "1월",
+  "2월",
+  "3월",
+  "4월",
+  "5월",
+  "6월",
+  "7월",
+  "8월",
+  "9월",
+  "10월",
+  "11월",
+  "12월",
 ];
 
 /* ── CalendarMonth ────────────────────────────── */
@@ -52,7 +86,14 @@ interface CalendarMonthProps {
   onHover: (date: string | null) => void;
 }
 
-function CalendarMonth({ year, month, range, hoverDate, onSelect, onHover }: CalendarMonthProps) {
+function CalendarMonth({
+  year,
+  month,
+  range,
+  hoverDate,
+  onSelect,
+  onHover,
+}: CalendarMonthProps) {
   const days = daysInMonth(year, month);
   const offset = startDayOfMonth(year, month);
 
@@ -87,9 +128,9 @@ function CalendarMonth({ year, month, range, hoverDate, onSelect, onHover }: Cal
         onMouseLeave={() => onHover(null)}
         className={`flex h-[28px] w-[28px] items-center justify-center rounded-md text-[12px] transition-colors ${
           end
-            ? "bg-monitor-accent-blue text-white font-semibold"
+            ? "bg-monitor-accent-blue font-semibold text-white"
             : inRange
-              ? "bg-[rgba(81,162,255,0.15)] text-monitor-accent-blue"
+              ? "text-monitor-accent-blue bg-[rgba(81,162,255,0.15)]"
               : isToday
                 ? "text-monitor-accent-blue font-semibold"
                 : "text-monitor-text hover:bg-[rgba(255,255,255,0.06)]"
@@ -102,12 +143,15 @@ function CalendarMonth({ year, month, range, hoverDate, onSelect, onHover }: Cal
 
   return (
     <div className="w-full sm:w-[224px]">
-      <div className="mb-2 text-center text-[13px] font-semibold text-monitor-text">
+      <div className="text-monitor-text mb-2 text-center text-[13px] font-semibold">
         {year}년 {MONTH_NAMES[month]}
       </div>
       <div className="grid grid-cols-7 gap-y-[2px] text-center">
         {WEEKDAYS.map((w) => (
-          <div key={w} className="text-monitor-text-dim pb-1 text-[10px] font-medium">
+          <div
+            key={w}
+            className="text-monitor-text-dim pb-1 text-[10px] font-medium"
+          >
             {w}
           </div>
         ))}
@@ -151,29 +195,36 @@ export default function DateRangePicker({
   useClickOutside(ref, onClose, open);
 
   function prevMonth() {
-    if (viewMonth === 0) { setViewYear((y) => y - 1); setViewMonth(11); }
-    else setViewMonth((m) => m - 1);
+    if (viewMonth === 0) {
+      setViewYear((y) => y - 1);
+      setViewMonth(11);
+    } else setViewMonth((m) => m - 1);
   }
 
   function nextMonth() {
-    if (viewMonth === 11) { setViewYear((y) => y + 1); setViewMonth(0); }
-    else setViewMonth((m) => m + 1);
+    if (viewMonth === 11) {
+      setViewYear((y) => y + 1);
+      setViewMonth(0);
+    } else setViewMonth((m) => m + 1);
   }
 
-  const handleSelect = useCallback((dateStr: string) => {
-    if (!selecting || selecting === "from") {
-      setTempRange({ from: dateStr, to: null });
-      setSelecting("to");
-    } else {
-      const from = tempRange.from!;
-      const [lo, hi] = from <= dateStr ? [from, dateStr] : [dateStr, from];
-      const final = { from: lo, to: hi };
-      setTempRange(final);
-      setSelecting(null);
-      onChange(final);
-      onClose();
-    }
-  }, [selecting, tempRange.from, onChange, onClose]);
+  const handleSelect = useCallback(
+    (dateStr: string) => {
+      if (!selecting || selecting === "from") {
+        setTempRange({ from: dateStr, to: null });
+        setSelecting("to");
+      } else {
+        const from = tempRange.from!;
+        const [lo, hi] = from <= dateStr ? [from, dateStr] : [dateStr, from];
+        const final = { from: lo, to: hi };
+        setTempRange(final);
+        setSelecting(null);
+        onChange(final);
+        onClose();
+      }
+    },
+    [selecting, tempRange.from, onChange, onClose],
+  );
 
   function handlePreset(preset: DateRange) {
     onChange(preset);
@@ -190,12 +241,14 @@ export default function DateRangePicker({
       <button
         type="button"
         onClick={onToggle}
-        className={`border-monitor-border bg-monitor-card-bg hover:bg-[rgba(255,255,255,0.06)] text-monitor-text flex h-10 items-center gap-2 rounded-lg border px-3 text-[13px] font-medium transition-colors whitespace-nowrap ${
+        className={`border-monitor-border bg-monitor-card-bg text-monitor-text flex h-10 items-center gap-2 rounded-lg border px-3 text-[13px] font-medium whitespace-nowrap transition-colors hover:bg-[rgba(255,255,255,0.06)] ${
           hasRange ? "border-monitor-accent-blue/40" : ""
         }`}
       >
         <CalendarIcon className="text-monitor-text-dim h-[14px] w-[14px] shrink-0" />
-        <span className={`max-w-[180px] truncate ${hasRange ? "text-monitor-accent-blue" : ""}`}>
+        <span
+          className={`max-w-[180px] truncate ${hasRange ? "text-monitor-accent-blue" : ""}`}
+        >
           {formatLabel(value)}
         </span>
         <ChevronDownIcon
@@ -204,10 +257,10 @@ export default function DateRangePicker({
       </button>
 
       {open && (
-        <div className="border-monitor-border bg-monitor-card-bg fixed inset-x-2 top-1/2 z-50 -translate-y-1/2 rounded-xl border p-4 shadow-xl sm:inset-x-auto sm:translate-y-0 sm:absolute sm:right-0 sm:top-[calc(100%+4px)]">
+        <div className="border-monitor-border bg-monitor-card-bg fixed inset-x-2 top-1/2 z-50 -translate-y-1/2 rounded-xl border p-4 shadow-xl sm:absolute sm:inset-x-auto sm:top-[calc(100%+4px)] sm:right-0 sm:translate-y-0">
           <div className="flex flex-col gap-4 sm:flex-row sm:gap-4">
             {/* 프리셋 */}
-            <div className="border-monitor-border flex shrink-0 flex-row gap-1 overflow-x-auto border-b pb-3 sm:w-[110px] sm:flex-col sm:gap-0.5 sm:overflow-x-visible sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
+            <div className="border-monitor-border flex shrink-0 flex-row gap-1 overflow-x-auto border-b pb-3 sm:w-[110px] sm:flex-col sm:gap-0.5 sm:overflow-x-visible sm:border-r sm:border-b-0 sm:pr-4 sm:pb-0">
               <span className="text-monitor-text-dim mb-1 hidden text-[10px] font-semibold tracking-wider uppercase sm:mb-2 sm:block">
                 프리셋
               </span>
@@ -220,10 +273,10 @@ export default function DateRangePicker({
                     key={p.label}
                     type="button"
                     onClick={() => handlePreset(preset)}
-                    className={`shrink-0 rounded-md px-2 py-1.5 text-left text-[12px] transition-colors whitespace-nowrap ${
+                    className={`shrink-0 rounded-md px-2 py-1.5 text-left text-[12px] whitespace-nowrap transition-colors ${
                       active
-                        ? "bg-[rgba(81,162,255,0.12)] text-monitor-accent-blue font-medium"
-                        : "text-monitor-text-muted hover:bg-[rgba(255,255,255,0.05)] hover:text-monitor-text"
+                        ? "text-monitor-accent-blue bg-[rgba(81,162,255,0.12)] font-medium"
+                        : "text-monitor-text-muted hover:text-monitor-text hover:bg-[rgba(255,255,255,0.05)]"
                     }`}
                   >
                     {p.label}
