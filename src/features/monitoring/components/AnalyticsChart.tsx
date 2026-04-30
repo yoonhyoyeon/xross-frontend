@@ -10,15 +10,16 @@ import type { AnalyticsDataPoint } from "@/features/monitoring/types/monitoring.
 
 interface AnalyticsChartProps {
   data: AnalyticsDataPoint[];
+  height: number;
 }
 
 function formatTick(value: string): string {
   return value.replace(":00", "시");
 }
 
-export default function AnalyticsChart({ data }: AnalyticsChartProps) {
+export default function AnalyticsChart({ data, height }: AnalyticsChartProps) {
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={height}>
       <AreaChart
         data={data}
         margin={{ top: 5, right: 8, left: 8, bottom: 20 }}

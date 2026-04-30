@@ -1,9 +1,23 @@
+import { useState } from "react";
 import Input from "@/shared/ui/Input";
 import { useNavigate } from "react-router";
 import BrandLogo from "@/shared/ui/BrandLogo";
+import { useLogin } from "@/features/auth/hooks/useLogin";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const mutation = useLogin();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate(
+      { email, password },
+      { onSuccess: () => navigate("/monitoring") },
+    );
+  };
+
   return (
     <div className="flex w-full max-w-96 flex-col">
       {/* 모바일: 브랜딩 영역 · PC는 AuthLayout 좌측 패널 사용 */}
@@ -48,12 +62,21 @@ export default function LoginForm() {
           </p>
         </div>
 
-        <form
-          className="flex flex-col gap-5"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <Input label="이메일" type="email" placeholder="admin@store.com" />
-          <Input label="비밀번호" type="password" placeholder="••••••••" />
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <Input
+            label="이메일"
+            type="email"
+            placeholder="admin@store.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="비밀번호"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
           {/* 로그인 유지 + 비밀번호 찾기 */}
           <div className="flex items-center justify-between">
@@ -74,14 +97,18 @@ export default function LoginForm() {
             </a>
           </div>
 
+          {mutation.isError && (
+            <p className="text-event-critical text-sm">
+              {mutation.error?.message ?? "로그인에 실패했습니다."}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="bg-brand-primary text-brand-on-primary shadow-button hover:bg-brand-primary-hover active:bg-brand-primary-active h-11 rounded-[10px] text-sm font-medium transition-colors"
-            onClick={() => {
-              navigate("/monitoring");
-            }}
+            disabled={mutation.isPending}
+            className="bg-brand-primary text-brand-on-primary shadow-button hover:bg-brand-primary-hover active:bg-brand-primary-active h-11 rounded-[10px] text-sm font-medium transition-colors disabled:opacity-60"
           >
-            로그인
+            {mutation.isPending ? "로그인 중..." : "로그인"}
           </button>
         </form>
       </div>

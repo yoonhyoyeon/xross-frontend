@@ -70,13 +70,8 @@ export default function AnalyticsPanel({
       </div>
 
       {/* 차트 — standalone일 때 적절한 높이, 아닐 때 고정 높이 */}
-      <div
-        className={cn(
-          "mt-3 min-w-0",
-          standalone ? "h-[240px] sm:h-[300px]" : "h-[132px]",
-        )}
-      >
-        <AnalyticsChart data={chartData} />
+      <div className="mt-3 min-w-0">
+        <AnalyticsChart data={chartData} height={standalone ? 240 : 132} />
       </div>
     </div>
   );
