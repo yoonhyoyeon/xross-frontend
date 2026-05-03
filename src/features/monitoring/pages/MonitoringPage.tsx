@@ -3,12 +3,11 @@ import MonitoringHeader from "@/features/monitoring/components/MonitoringHeader"
 import CameraGrid from "@/features/monitoring/components/CameraGrid";
 import AnalyticsPanel from "@/features/monitoring/components/AnalyticsPanel";
 import EventLogPanel from "@/features/monitoring/components/EventLogPanel";
-import {
-  MOCK_CAMERAS,
-  MOCK_EVENTS,
-  MOCK_ANALYTICS_DATA,
-  MOCK_ANALYTICS_STATS,
-} from "@/features/monitoring/data/monitoring.mock";
+import { MOCK_CAMERAS } from "@/features/monitoring/data/monitoring.mock";
+import { useEventStream } from "@/features/monitoring/hooks/useEventStream";
+import { useAlertStream } from "@/features/monitoring/hooks/useAlertStream";
+import type { EventResponse } from "@/features/monitoring/api/monitoring.types";
+import type { AnalyticsDataPoint } from "@/features/monitoring/types/monitoring.types";
 import { cn } from "@/shared/lib/utils";
 import ShieldIcon from "@/assets/icons/shield.svg?react";
 import LogsIcon from "@/assets/icons/logs.svg?react";
@@ -24,11 +23,64 @@ const MOBILE_TABS: {
   { key: "events", label: "탐지 로그", Icon: LogsIcon },
 ];
 
+function buildStats(events: EventResponse[]) {
+  return [
+    {
+      label: "총 입장",
+      value: String(events.filter((e) => e.type === "ENTER").length),
+    },
+    {
+      label: "상품 집기",
+      value: String(events.filter((e) => e.type === "PICK").length),
+    },
+    {
+      label: "이상 감지",
+      value: String(events.filter((e) => e.type === "ALERT").length),
+      variant: "danger" as const,
+    },
+    {
+      label: "결제 완료",
+      value: String(events.filter((e) => e.type === "PAYMENT").length),
+      variant: "success" as const,
+    },
+  ];
+}
+
+function buildChartData(events: EventResponse[]): AnalyticsDataPoint[] {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  return Array.from({ length: currentHour + 1 }, (_, h) => {
+    const hour = new Date(now);
+    hour.setHours(h, 0, 0, 0);
+    const nextHour = new Date(hour);
+    nextHour.setHours(h + 1);
+
+    const inRange = events.filter((e) => {
+      const t = new Date(e.occurredAt).getTime();
+      return t >= hour.getTime() && t < nextHour.getTime();
+    });
+
+    return {
+      time: `${h}시`,
+      picks: inRange.filter((e) => e.type === "PICK").length,
+      suspicions: inRange.filter(
+        (e) => e.type === "ALERT" || e.type === "WEIGHT_CHANGE",
+      ).length,
+    };
+  });
+}
+
 export default function MonitoringPage() {
   const [mobileTab, setMobileTab] = useState<MobileTab>("monitor");
-  const criticalCount = MOCK_EVENTS.filter(
-    (e) => e.severity === "critical",
+  const { events } = useEventStream();
+  const { alerts, connected } = useAlertStream();
+
+  const criticalCount = alerts.filter(
+    (a) => a.status === "PENDING" || a.status === "SENT",
   ).length;
+  const stats = buildStats(events);
+  const chartData = buildChartData(events);
 
   return (
     <>
@@ -36,7 +88,6 @@ export default function MonitoringPage() {
 
       {/* ── 모바일/태블릿: 탭 전환 ──────────────── */}
       <div className="flex flex-1 flex-col overflow-hidden lg:hidden">
-        {/* 세그먼트 탭 바 — 설정 페이지 모바일 탭과 동일 스타일 */}
         <div className="border-monitor-border bg-monitor-bg shrink-0 border-b px-3 py-2.5">
           <div className="flex gap-1 rounded-xl bg-[rgba(255,255,255,0.06)] p-1">
             {MOBILE_TABS.map(({ key, label, Icon }) => {
@@ -75,25 +126,18 @@ export default function MonitoringPage() {
           </div>
         </div>
 
-        {/* 탭 콘텐츠 */}
         <div className="bg-monitor-bg flex flex-1 flex-col overflow-hidden">
           {mobileTab === "monitor" && (
             <div className="flex flex-1 flex-col overflow-auto">
-              {/* CCTV */}
               <div className="min-h-[220px] shrink-0 sm:min-h-[280px]">
                 <CameraGrid cameras={MOCK_CAMERAS} />
               </div>
-              {/* 분석 통계 */}
-              <AnalyticsPanel
-                stats={MOCK_ANALYTICS_STATS}
-                chartData={MOCK_ANALYTICS_DATA}
-                standalone
-              />
+              <AnalyticsPanel stats={stats} chartData={chartData} standalone />
             </div>
           )}
 
           {mobileTab === "events" && (
-            <EventLogPanel events={MOCK_EVENTS} standalone />
+            <EventLogPanel alerts={alerts} connected={connected} standalone />
           )}
         </div>
       </div>
@@ -104,12 +148,9 @@ export default function MonitoringPage() {
           <div className="flex-1 overflow-hidden">
             <CameraGrid cameras={MOCK_CAMERAS} />
           </div>
-          <AnalyticsPanel
-            stats={MOCK_ANALYTICS_STATS}
-            chartData={MOCK_ANALYTICS_DATA}
-          />
+          <AnalyticsPanel stats={stats} chartData={chartData} />
         </div>
-        <EventLogPanel events={MOCK_EVENTS} />
+        <EventLogPanel alerts={alerts} connected={connected} />
       </main>
     </>
   );

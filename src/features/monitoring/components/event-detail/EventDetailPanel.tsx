@@ -1,4 +1,4 @@
-import type { EventDetail } from "@/features/monitoring/types/monitoring.types";
+import type { EventDetail, EventSeverity } from "@/features/monitoring/types/monitoring.types";
 import EventVerificationList from "./EventVerificationList";
 import EventDetailTimeline from "./EventDetailTimeline";
 import EventDetailActions from "./EventDetailActions";
@@ -6,7 +6,6 @@ import ShieldAlertIcon from "@/assets/icons/shield-alert.svg?react";
 import TriangleAlertIcon from "@/assets/icons/triangle-alert.svg?react";
 import EventInfoIcon from "@/assets/icons/event-info.svg?react";
 import PersonStandingIcon from "@/assets/icons/person-standing.svg?react";
-import type { EventSeverity } from "@/features/monitoring/types/monitoring.types";
 
 const SEVERITY_CONFIG: Record<
   EventSeverity,

@@ -1,5 +1,6 @@
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router";
 import { cn } from "@/shared/lib/utils";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 import ShieldIcon from "@/assets/icons/shield.svg?react";
 import ReceiptIcon from "@/assets/icons/receipt.svg?react";
@@ -20,7 +21,7 @@ const navItems: NavItem[] = [
 ];
 
 export default function Sidebar() {
-  const navigate = useNavigate();
+  const logout = useLogout();
 
   return (
     <aside className="border-input-border bg-surface-page hidden h-screen w-[288px] shrink-0 flex-col border-r lg:flex">
@@ -69,7 +70,7 @@ export default function Sidebar() {
         <button
           type="button"
           className="text-dashboard-subtitle flex h-[46px] w-full items-center gap-3 rounded-[14px] pl-[17px] transition-colors hover:bg-slate-100"
-          onClick={() => navigate("/auth/login")}
+          onClick={logout}
         >
           <LogOutIcon className="h-5 w-5 shrink-0" />
           <span className="text-[14px] leading-5 font-medium tracking-[-0.15px]">

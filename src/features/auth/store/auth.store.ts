@@ -2,20 +2,24 @@ import { create } from "zustand";
 
 interface AuthState {
   accessToken: string | null;
-  setAccessToken: (token: string) => void;
+  storeId: number | null;
+  setAuth: (token: string, storeId: number) => void;
   clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: localStorage.getItem("xross_access_token"),
+  storeId: Number(localStorage.getItem("xross_store_id")) || null,
 
-  setAccessToken: (token) => {
+  setAuth: (token, storeId) => {
     localStorage.setItem("xross_access_token", token);
-    set({ accessToken: token });
+    localStorage.setItem("xross_store_id", String(storeId));
+    set({ accessToken: token, storeId });
   },
 
   clearAuth: () => {
     localStorage.removeItem("xross_access_token");
-    set({ accessToken: null });
+    localStorage.removeItem("xross_store_id");
+    set({ accessToken: null, storeId: null });
   },
 }));

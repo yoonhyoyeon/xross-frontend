@@ -554,6 +554,31 @@
         "tags": ["events"]
       }
     },
+    "/events/stream": {
+      "get": {
+        "description": "매장의 이벤트를 실시간으로 구독합니다. 연결 시 기존 이벤트를 모두 전송하고, 이후 새 이벤트가 생성되면 실시간으로 전송합니다.",
+        "operationId": "EventController_streamEvents",
+        "parameters": [
+          {
+            "name": "storeId",
+            "required": true,
+            "in": "query",
+            "description": "매장 ID",
+            "schema": { "example": 1, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "초기 이벤트 조회 개수",
+            "schema": { "example": 100, "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "summary": "이벤트 스트림 구독",
+        "tags": ["events"]
+      }
+    },
     "/event-details/{id}": {
       "get": {
         "description": "ID로 특정 EventDetail을 조회합니다.",
@@ -796,6 +821,76 @@
         },
         "summary": "매장별 알림 조회",
         "tags": ["alerts"]
+      },
+      "post": {
+        "description": "새로운 알림을 생성합니다. 생성된 알림은 SSE 스트림을 통해 실시간으로 구독자에게 전송됩니다.",
+        "operationId": "AlertController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAlertDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "알림 생성 완료",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AlertResponse" }
+              }
+            }
+          }
+        },
+        "summary": "알림 생성",
+        "tags": ["alerts"]
+      }
+    },
+    "/alerts/{id}": {
+      "get": {
+        "description": "특정 알림의 상세 정보를 조회합니다. 연관된 고객, 이벤트 정보를 포함합니다.",
+        "operationId": "AlertController_findById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "알림 ID",
+            "schema": { "example": 1, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "알림 상세 정보",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AlertResponse" }
+              }
+            }
+          }
+        },
+        "summary": "알림 상세 조회",
+        "tags": ["alerts"]
+      }
+    },
+    "/alerts/stream": {
+      "get": {
+        "description": "매장의 알림을 실시간으로 구독합니다. 연결 시 기존 알림을 모두 전송하고, 이후 새 알림이 생성되면 실시간으로 전송합니다.",
+        "operationId": "AlertController_streamAlerts",
+        "parameters": [
+          {
+            "name": "storeId",
+            "required": true,
+            "in": "query",
+            "description": "매장 ID",
+            "schema": { "example": 1, "type": "number" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "summary": "알림 스트림 구독",
+        "tags": ["alerts"]
       }
     },
     "/alerts/{id}/acknowledge": {
@@ -842,6 +937,110 @@
         },
         "summary": "알림 확인 처리",
         "tags": ["alerts"]
+      }
+    },
+    "/payments": {
+      "get": {
+        "description": "특정 매장의 결제 목록을 조회합니다.",
+        "operationId": "PaymentController_findByStore",
+        "parameters": [
+          {
+            "name": "storeId",
+            "required": true,
+            "in": "query",
+            "description": "매장 ID",
+            "schema": { "example": 1, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "조회 개수 제한",
+            "schema": { "example": 50, "type": "string" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "결제 상태 필터",
+            "schema": {
+              "enum": ["PENDING", "SUCCESS", "FAILED", "CANCELED"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "결제 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PaymentResponse" }
+                }
+              }
+            }
+          }
+        },
+        "summary": "매장별 결제 조회",
+        "tags": ["payments"]
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "description": "특정 결제의 상세 정보를 조회합니다.",
+        "operationId": "PaymentController_findById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "결제 ID",
+            "schema": { "example": 1, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "결제 상세 정보",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaymentResponse" }
+              }
+            }
+          }
+        },
+        "summary": "결제 상세 조회",
+        "tags": ["payments"]
+      }
+    },
+    "/payments/customer/{customerId}": {
+      "get": {
+        "description": "특정 고객의 결제 이력을 조회합니다.",
+        "operationId": "PaymentController_findByCustomer",
+        "parameters": [
+          {
+            "name": "customerId",
+            "required": true,
+            "in": "path",
+            "description": "고객 ID",
+            "schema": { "example": 1, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "고객 결제 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PaymentResponse" }
+                }
+              }
+            }
+          }
+        },
+        "summary": "고객별 결제 조회",
+        "tags": ["payments"]
       }
     }
   },
@@ -1810,16 +2009,42 @@
             "description": "관련 고객 ID",
             "nullable": true
           },
-          "eventId": {
-            "type": "object",
-            "description": "관련 이벤트 ID",
-            "nullable": true
+          "relatedEventIds": {
+            "description": "관련 이벤트 ID 배열",
+            "example": [1, 2, 3],
+            "type": "array",
+            "items": { "type": "number" }
           },
           "createdAt": {
             "format": "date-time",
             "type": "string",
             "description": "생성 시간",
             "example": "2026-04-09T10:30:00Z"
+          },
+          "customer": {
+            "type": "object",
+            "description": "관련 고객 정보",
+            "nullable": true,
+            "example": {
+              "id": 1,
+              "trackingKey": "CUST-20260501-001",
+              "state": "EXIT"
+            }
+          },
+          "store": {
+            "type": "object",
+            "description": "매장 정보",
+            "example": { "id": 1, "name": "강남점", "code": "STORE-001" }
+          },
+          "acknowledgedBy": {
+            "type": "object",
+            "description": "확인 처리자 정보",
+            "nullable": true,
+            "example": {
+              "id": 1,
+              "name": "관리자",
+              "email": "admin@example.com"
+            }
           }
         },
         "required": [
@@ -1829,7 +2054,185 @@
           "channel",
           "status",
           "storeId",
+          "relatedEventIds",
           "createdAt"
+        ]
+      },
+      "CreateAlertDto": {
+        "type": "object",
+        "properties": {
+          "storeId": {
+            "type": "number",
+            "description": "매장 ID",
+            "example": 1
+          },
+          "customerId": { "type": "number", "description": "관련 고객 ID" },
+          "relatedEventIds": {
+            "description": "관련 이벤트 ID 배열",
+            "example": [1, 2, 3],
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          "title": {
+            "type": "string",
+            "description": "알림 제목",
+            "example": "미결제 퇴장 감지"
+          },
+          "message": {
+            "type": "string",
+            "description": "알림 메시지",
+            "example": "고객이 결제 없이 퇴장했습니다."
+          },
+          "channel": {
+            "type": "string",
+            "description": "알림 채널",
+            "enum": ["DASHBOARD", "SMS", "EMAIL", "PUSH"],
+            "example": "DASHBOARD"
+          }
+        },
+        "required": ["storeId", "title", "message", "channel"]
+      },
+      "i": { "type": "object", "properties": {} },
+      "PaymentItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "결제 항목 ID",
+            "example": 1
+          },
+          "quantity": { "type": "number", "description": "수량", "example": 2 },
+          "unitPrice": {
+            "description": "단가",
+            "example": 1500,
+            "allOf": [{ "$ref": "#/components/schemas/i" }]
+          },
+          "subtotal": {
+            "description": "소계",
+            "example": 3000,
+            "allOf": [{ "$ref": "#/components/schemas/i" }]
+          },
+          "productId": {
+            "type": "number",
+            "description": "상품 ID",
+            "example": 1
+          },
+          "product": {
+            "type": "object",
+            "description": "상품 정보",
+            "example": {
+              "id": 1,
+              "name": "코카콜라 500ml",
+              "sku": "COLA-500",
+              "price": 1500
+            }
+          }
+        },
+        "required": [
+          "id",
+          "quantity",
+          "unitPrice",
+          "subtotal",
+          "productId",
+          "product"
+        ]
+      },
+      "PaymentResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "결제 ID", "example": 1 },
+          "externalPaymentId": {
+            "type": "object",
+            "description": "외부 결제 ID",
+            "example": "PAY-20260501-001",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "number",
+            "description": "총 상품 수",
+            "example": 3
+          },
+          "totalAmount": {
+            "type": "object",
+            "description": "총 결제 금액",
+            "example": 5200
+          },
+          "paidAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "결제 시각",
+            "example": "2026-05-01T12:00:00Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "결제 상태",
+            "enum": ["PENDING", "SUCCESS", "FAILED", "CANCELED"],
+            "example": "SUCCESS"
+          },
+          "isMatchedToCart": {
+            "type": "boolean",
+            "description": "장바구니 매칭 여부",
+            "example": true
+          },
+          "storeId": {
+            "type": "number",
+            "description": "매장 ID",
+            "example": 1
+          },
+          "customerId": {
+            "type": "number",
+            "description": "고객 ID",
+            "example": 1
+          },
+          "cartId": {
+            "type": "number",
+            "description": "장바구니 ID",
+            "example": 1
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성 시간",
+            "example": "2026-05-01T12:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정 시간",
+            "example": "2026-05-01T12:00:00Z"
+          },
+          "items": {
+            "description": "결제 항목 목록",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PaymentItemResponse" }
+          },
+          "customer": {
+            "type": "object",
+            "description": "고객 정보",
+            "example": { "id": 1, "trackingKey": "CUST-20260501-001" }
+          },
+          "cart": {
+            "type": "object",
+            "description": "장바구니 정보",
+            "example": {
+              "id": 3,
+              "totalCount": 3,
+              "totalWeightG": 1150,
+              "isCheckedOut": true
+            }
+          }
+        },
+        "required": [
+          "id",
+          "totalCount",
+          "paidAt",
+          "status",
+          "isMatchedToCart",
+          "storeId",
+          "customerId",
+          "cartId",
+          "createdAt",
+          "updatedAt"
         ]
       }
     }
