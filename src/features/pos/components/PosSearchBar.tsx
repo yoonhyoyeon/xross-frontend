@@ -8,23 +8,21 @@ import type {
   PaymentFilterOption,
 } from "@/features/pos/types/pos.types";
 
-/* ── 상태 필터 ────────────────────────────────── */
 const STATUS_OPTIONS: { value: StatusFilterOption; label: string }[] = [
   { value: "all", label: "전체 상태" },
   { value: "normal", label: "정상 결제" },
   { value: "unpaid", label: "미결제 의심" },
-  { value: "refund", label: "환불" },
+  { value: "mismatch", label: "장바구니 불일치" },
 ];
 
-/* ── 결제 수단 필터 ───────────────────────────── */
 const PAYMENT_OPTIONS: { value: PaymentFilterOption; label: string }[] = [
   { value: "all", label: "전체" },
   { value: "card", label: "카드" },
   { value: "cash", label: "현금" },
   { value: "mobile", label: "모바일" },
+  { value: "qr_code", label: "QR" },
 ];
 
-/* ── PosSearchBar 메인 ────────────────────────── */
 export interface PosFilters {
   search: string;
   dateRange: DateRange;
@@ -40,9 +38,7 @@ interface PosSearchBarProps {
 }
 
 export default function PosSearchBar({ filters, onChange }: PosSearchBarProps) {
-  const [openDropdown, setOpenDropdown] = useState<OpenDropdownKey | null>(
-    null,
-  );
+  const [openDropdown, setOpenDropdown] = useState<OpenDropdownKey | null>(null);
 
   function handleDropdownToggle(key: OpenDropdownKey) {
     setOpenDropdown((prev) => (prev === key ? null : key));
@@ -54,21 +50,18 @@ export default function PosSearchBar({ filters, onChange }: PosSearchBarProps) {
 
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-      {/* 검색창 */}
       <div className="relative flex-1">
         <SearchIcon className="text-monitor-text-dim pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <input
           type="text"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
-          placeholder="거래 ID, 상품명, 추적 ID 검색..."
+          placeholder="거래 ID, 추적 ID 검색..."
           className="border-monitor-border bg-monitor-card-bg text-monitor-text placeholder:text-monitor-text-dim focus:border-monitor-accent-blue focus:ring-monitor-accent-blue/20 h-10 w-full rounded-lg border py-2 pr-4 pl-10 text-[13px] transition-colors outline-none focus:ring-2"
         />
       </div>
 
-      {/* 필터 그룹 */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* 날짜 범위 선택 */}
         <DateRangePicker
           value={filters.dateRange}
           onChange={(range) => onChange({ ...filters, dateRange: range })}
@@ -76,8 +69,6 @@ export default function PosSearchBar({ filters, onChange }: PosSearchBarProps) {
           onToggle={() => handleDropdownToggle("date")}
           onClose={handleDropdownClose}
         />
-
-        {/* 상태 필터 */}
         <FilterDropdown
           value={filters.status}
           options={STATUS_OPTIONS}
@@ -86,8 +77,6 @@ export default function PosSearchBar({ filters, onChange }: PosSearchBarProps) {
           onToggle={() => handleDropdownToggle("status")}
           onClose={handleDropdownClose}
         />
-
-        {/* 결제 수단 필터 */}
         <FilterDropdown
           value={filters.payment}
           options={PAYMENT_OPTIONS}

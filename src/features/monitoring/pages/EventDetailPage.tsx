@@ -17,6 +17,8 @@ const SOURCE_CAMERA_NAME: Record<EventSource, string> = {
   FREEZER_CAMERA: "냉동고 카메라",
   WEIGHT_SENSOR: "무게 센서",
   POS: "POS",
+  BACKEND: "백엔드",
+  SYSTEM: "시스템",
 };
 
 export default function EventDetailPage() {

@@ -2,14 +2,24 @@ export interface EventCustomerResponse {
   id: number;
   trackingKey: string;
   userId?: number | null;
+  enterTime?: string | null;
+  exitTime?: string | null;
+  state?: "PAID" | "UNPAID_SUSPICIOUS" | "BROWSE" | string | null;
+  currentZone?: string | null;
+  lastSeenAt?: string | null;
+  isTrackingEnded?: boolean | null;
 }
 
 export interface EventProductResponse {
   id: number;
   name: string;
   sku: string;
-  price: number;
-  weightPerUnitG: number;
+  price: number | string;
+  weightPerUnitG?: number | null;
+  unitWeightG?: number | null;
+  category?: string | null;
+  expectedStockCount?: number | null;
+  isActive?: boolean | null;
 }
 
 export interface EventFreezerResponse {
@@ -19,11 +29,21 @@ export interface EventFreezerResponse {
 }
 
 export type EventType =
-  | "ENTER" | "EXIT" | "PICK" | "PUT"
-  | "PAYMENT" | "WEIGHT_CHANGE" | "ALERT";
+  | "ENTER" | "LOCATION_UPDATE" | "SENSOR_TRIGGER"
+  | "PICK" | "PUT" | "BROWSE_ONLY" | "CART_UPDATED"
+  | "PAYMENT_RECEIVED" | "PAYMENT_MATCHED" | "PAYMENT_MISMATCH"
+  | "UNPAID_SUSPICIOUS" | "EXIT_LINE_CROSSED"
+  | "LONG_STAY" | "FALL_DETECTED" | "ALERT_SENT";
 
 export type EventSource =
   | "CEILING_CAMERA" | "FREEZER_CAMERA" | "WEIGHT_SENSOR" | "POS";
+
+export interface EventAlertSummary {
+  id: number;
+  title: string;
+  priority: "WARNING" | "CRITICAL";
+  status: "PENDING" | "SENT" | "FAILED" | "ACKNOWLEDGED";
+}
 
 export interface EventResponse {
   id: number;
@@ -48,22 +68,12 @@ export interface EventResponse {
   customer?: EventCustomerResponse | null;
   product?: EventProductResponse | null;
   freezer?: EventFreezerResponse | null;
+  alert?: EventAlertSummary | null;
 }
 
-export type AlertChannel = "DASHBOARD" | "SMS" | "EMAIL" | "PUSH" | "WEB";
-export type AlertStatus = "PENDING" | "SENT" | "ACKNOWLEDGED" | "RESOLVED";
-
-export interface AlertStoreResponse {
-  id: number;
-  name: string;
-  code: string;
-}
-
-export interface AlertAcknowledgedByResponse {
-  id: number;
-  name: string;
-  email: string;
-}
+export type AlertChannel = "WEB" | "MOBILE" | "SPEAKER";
+export type AlertStatus = "PENDING" | "SENT" | "FAILED" | "ACKNOWLEDGED";
+export type AlertPriority = "WARNING" | "CRITICAL";
 
 export interface AlertResponse {
   id: number;
@@ -71,13 +81,14 @@ export interface AlertResponse {
   message: string;
   channel: AlertChannel;
   status: AlertStatus;
+  priority: AlertPriority;
   storeId: number;
   createdAt: string;
   relatedEventIds: number[];
   customerId?: number | null;
   customer?: EventCustomerResponse | null;
-  store?: AlertStoreResponse | null;
-  acknowledgedBy?: AlertAcknowledgedByResponse | null;
+  store?: { id: number; name: string; code: string } | null;
+  acknowledgedBy?: { id: number; name: string; email: string } | null;
 }
 
 export type EventDetailType =

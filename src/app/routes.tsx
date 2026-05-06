@@ -1,11 +1,23 @@
+import { useEffect } from "react";
 import { Navigate, Outlet, type RouteObject } from "react-router";
 import AuthLayout from "@/shared/layouts/AuthLayout";
 import RootLayout from "@/shared/layouts/RootLayout";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useMe } from "@/features/auth/hooks/useMe";
 
 const ProtectedRoute = () => {
   const accessToken = useAuthStore((s) => s.accessToken);
-  return accessToken ? <Outlet /> : <Navigate to="/auth/login" replace />;
+  const syncStoreId = useAuthStore((s) => s.syncStoreId);
+  const { data: me, isLoading } = useMe();
+
+  useEffect(() => {
+    if (me) syncStoreId(me.storeId);
+  }, [me, syncStoreId]);
+
+  if (!accessToken) return <Navigate to="/auth/login" replace />;
+  if (isLoading) return null;
+
+  return <Outlet />;
 };
 import LoginPage from "@/features/auth/pages/LoginPage";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";

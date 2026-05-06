@@ -1,5 +1,6 @@
 import SettingsSection from "@/features/setting/components/SettingsSection";
 import SettingsRow from "@/features/setting/components/SettingsRow";
+import { useMe } from "@/features/auth/hooks/useMe";
 
 import CameraIcon from "@/assets/icons/camera.svg?react";
 import BalanceScaleIcon from "@/assets/icons/balance-scale.svg?react";
@@ -67,18 +68,20 @@ function CameraRow({
 }
 
 export default function StoreTab() {
+  const { data: me } = useMe();
+
   return (
     <div className="flex flex-col gap-8">
       {/* 매장 기본 정보 */}
       <SettingsSection title="매장 기본 정보">
         <SettingsRow label="매장 ID" hasBorder>
           <span className="font-mono text-[14px] leading-5 text-[#cad5e2]">
-            KOR-강남점
+            {me ? String(me.storeId) : "—"}
           </span>
         </SettingsRow>
         <SettingsRow label="매장명" hasBorder>
           <span className="text-[14px] leading-5 tracking-[-0.15px] text-[#d4d4d4]">
-            XROSS 강남점
+            {me?.storeName ?? "—"}
           </span>
         </SettingsRow>
         <SettingsRow label="운영 시간" hasBorder>

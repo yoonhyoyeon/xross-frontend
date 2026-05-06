@@ -1,6 +1,6 @@
 import CheckCircleIcon from "@/assets/icons/check-circle.svg?react";
 import ShieldAlertIcon from "@/assets/icons/shield-alert.svg?react";
-import RotateCcwIcon from "@/assets/icons/rotate-ccw.svg?react";
+import TriangleAlertIcon from "@/assets/icons/triangle-alert.svg?react";
 import type { TransactionStatus } from "@/features/pos/types/pos.types";
 
 const STATUS_CONFIG: Record<
@@ -27,12 +27,12 @@ const STATUS_CONFIG: Record<
     bgClass: "bg-[rgba(251,44,54,0.1)]",
     borderClass: "border-[rgba(251,44,54,0.2)]",
   },
-  refund: {
-    label: "환불",
-    icon: RotateCcwIcon,
-    textClass: "text-[#ffb900]",
-    bgClass: "bg-[rgba(255,185,0,0.1)]",
-    borderClass: "border-[rgba(255,185,0,0.2)]",
+  mismatch: {
+    label: "장바구니 불일치",
+    icon: TriangleAlertIcon,
+    textClass: "text-event-warning",
+    bgClass: "bg-[rgba(254,154,0,0.1)]",
+    borderClass: "border-[rgba(254,154,0,0.2)]",
   },
 };
 

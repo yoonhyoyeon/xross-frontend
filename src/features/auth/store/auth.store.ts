@@ -4,6 +4,7 @@ interface AuthState {
   accessToken: string | null;
   storeId: number | null;
   setAuth: (token: string, storeId: number) => void;
+  syncStoreId: (storeId: number) => void;
   clearAuth: () => void;
 }
 
@@ -15,6 +16,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem("xross_access_token", token);
     localStorage.setItem("xross_store_id", String(storeId));
     set({ accessToken: token, storeId });
+  },
+
+  syncStoreId: (storeId) => {
+    localStorage.setItem("xross_store_id", String(storeId));
+    set({ storeId });
   },
 
   clearAuth: () => {

@@ -3,9 +3,10 @@ import { cn } from "@/shared/lib/utils";
 import type { AlertResponse } from "@/features/monitoring/api/monitoring.types";
 import { getAlertSeverity } from "@/features/monitoring/lib/mappers";
 import ShieldAlertIcon from "@/assets/icons/shield-alert.svg?react";
+import TriangleAlertIcon from "@/assets/icons/triangle-alert.svg?react";
 import EventInfoIcon from "@/assets/icons/event-info.svg?react";
 
-type CardSeverity = "critical" | "info";
+type CardSeverity = "critical" | "warning" | "info";
 
 const SEVERITY_CONFIG: Record<
   CardSeverity,
@@ -25,6 +26,14 @@ const SEVERITY_CONFIG: Record<
     iconColor: "text-white",
     titleColor: "text-event-critical",
     Icon: ShieldAlertIcon,
+  },
+  warning: {
+    border: "border-[rgba(254,154,0,0.4)]",
+    shadow: "shadow-[0_0_15px_rgba(254,154,0,0.05)]",
+    iconBg: "bg-[#fe9a00] shadow-[0_0_10px_rgba(254,154,0,0.4)]",
+    iconColor: "text-white",
+    titleColor: "text-event-warning",
+    Icon: TriangleAlertIcon,
   },
   info: {
     border: "border-monitor-border",
@@ -51,7 +60,7 @@ interface EventCardProps {
 
 export default function EventCard({ alert }: EventCardProps) {
   const navigate = useNavigate();
-  const severity = getAlertSeverity(alert.status);
+  const severity = getAlertSeverity(alert.priority);
   const { Icon: EventIcon, ...style } = SEVERITY_CONFIG[severity];
   return (
     <div

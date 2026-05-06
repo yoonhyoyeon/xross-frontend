@@ -26,6 +26,11 @@ const PAYMENT_CONFIG: Record<
     icon: SmartphoneIcon,
     colorClass: "text-monitor-accent-purple",
   },
+  qr_code: {
+    label: "QR",
+    icon: SmartphoneIcon,
+    colorClass: "text-monitor-accent-purple",
+  },
 };
 
 interface PosPaymentMethodProps {

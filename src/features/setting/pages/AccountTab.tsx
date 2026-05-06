@@ -1,30 +1,43 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from "react";
 import ProfileSection from "@/features/setting/components/ProfileSection";
 import SecuritySection from "@/features/setting/components/SecuritySection";
+import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useMe } from "@/features/auth/hooks/useMe";
 
 import SaveIcon from "@/assets/icons/save.svg?react";
 import LogOutIcon from "@/assets/icons/log-out.svg?react";
 
-const INITIAL_PROFILE = {
-  name: "김민수",
-  role: "점주",
-  storeCode: "KOR-강남점",
-  email: "minsu.kim@xross.io",
-  phone: "010-1234-5678",
+const ROLE_LABEL: Record<string, string> = {
+  OWNER: "점주",
+  ADMIN: "관리자",
 };
 
 export default function AccountTab() {
-  const navigate = useNavigate();
-  const [profile, setProfile] = useState(INITIAL_PROFILE);
+  const logout = useLogout();
+  const { data: me } = useMe();
+  const [profile, setProfile] = useState({
+    name: "",
+    role: "",
+    storeCode: "",
+    email: "",
+    phone: "",
+  });
+
+  useEffect(() => {
+    if (me) {
+      setProfile({
+        name: me.name ?? "",
+        role: ROLE_LABEL[me.role] ?? me.role,
+        storeCode: me.storeName,
+        email: me.email,
+        phone: "",
+      });
+    }
+  }, [me]);
 
   const handleSave = () => {
     // TODO: API 연동
     console.log("저장:", profile);
-  };
-
-  const handleLogout = () => {
-    navigate("/auth/login");
   };
 
   return (
@@ -65,7 +78,7 @@ export default function AccountTab() {
 
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={logout}
           className="flex h-10 w-full items-center justify-center gap-2 rounded-[10px] border border-[#e2e8f0] bg-white px-5 py-[1px] transition-opacity hover:opacity-80 sm:w-auto sm:justify-start"
         >
           <span className="relative size-4 shrink-0 text-[#fb2c36]">

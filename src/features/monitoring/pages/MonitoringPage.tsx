@@ -6,6 +6,7 @@ import EventLogPanel from "@/features/monitoring/components/EventLogPanel";
 import { MOCK_CAMERAS } from "@/features/monitoring/data/monitoring.mock";
 import { useEventStream } from "@/features/monitoring/hooks/useEventStream";
 import { useAlertStream } from "@/features/monitoring/hooks/useAlertStream";
+import { getTodayStr, isToday } from "@/shared/lib/date";
 import type { EventResponse } from "@/features/monitoring/api/monitoring.types";
 import type { AnalyticsDataPoint } from "@/features/monitoring/types/monitoring.types";
 import { cn } from "@/shared/lib/utils";
@@ -40,19 +41,28 @@ function buildStats(events: EventResponse[]) {
     },
     {
       label: "결제 완료",
-      value: String(events.filter((e) => e.type === "PAYMENT").length),
+      value: String(
+        events.filter(
+          (e) => e.type === "PAYMENT" || e.type === "PAYMENT_RECEIVED",
+        ).length,
+      ),
       variant: "success" as const,
     },
   ];
 }
 
-function buildChartData(events: EventResponse[]): AnalyticsDataPoint[] {
+function buildChartData(
+  events: EventResponse[],
+  date: string,
+): AnalyticsDataPoint[] {
   const now = new Date();
-  const currentHour = now.getHours();
+  const currentDay = isToday(date);
+  const maxHour = currentDay ? now.getHours() : 23;
 
-  return Array.from({ length: currentHour + 1 }, (_, h) => {
-    const hour = new Date(now);
-    hour.setHours(h, 0, 0, 0);
+  return Array.from({ length: maxHour + 1 }, (_, h) => {
+    const base = new Date(`${date}T00:00:00`);
+    const hour = new Date(base);
+    hour.setHours(h);
     const nextHour = new Date(hour);
     nextHour.setHours(h + 1);
 
@@ -73,18 +83,23 @@ function buildChartData(events: EventResponse[]): AnalyticsDataPoint[] {
 
 export default function MonitoringPage() {
   const [mobileTab, setMobileTab] = useState<MobileTab>("monitor");
-  const { events } = useEventStream();
-  const { alerts, connected } = useAlertStream();
+  const [selectedDate, setSelectedDate] = useState(getTodayStr);
+
+  const { events } = useEventStream(selectedDate);
+  const { alerts, connected } = useAlertStream(selectedDate);
 
   const criticalCount = alerts.filter(
     (a) => a.status === "PENDING" || a.status === "SENT",
   ).length;
   const stats = buildStats(events);
-  const chartData = buildChartData(events);
+  const chartData = buildChartData(events, selectedDate);
 
   return (
     <>
-      <MonitoringHeader />
+      <MonitoringHeader
+        date={selectedDate}
+        onDateChange={setSelectedDate}
+      />
 
       {/* ── 모바일/태블릿: 탭 전환 ──────────────── */}
       <div className="flex flex-1 flex-col overflow-hidden lg:hidden">

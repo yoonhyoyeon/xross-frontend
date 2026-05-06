@@ -1,20 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg?react";
+import { CalendarGrid } from "@/shared/ui/CalendarGrid";
 import type { DateRange } from "@/features/pos/types/pos.types";
 
 /* ── helpers ──────────────────────────────────── */
 function toKR(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-function daysInMonth(year: number, month: number): number {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-function startDayOfMonth(year: number, month: number): number {
-  return new Date(year, month, 1).getDay();
+  return date.toLocaleDateString("en-CA");
 }
 
 function formatLabel(range: DateRange): string {
@@ -59,22 +52,7 @@ const PRESETS: { label: string; get: () => DateRange }[] = [
   },
 ];
 
-const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-
-const MONTH_NAMES = [
-  "1월",
-  "2월",
-  "3월",
-  "4월",
-  "5월",
-  "6월",
-  "7월",
-  "8월",
-  "9월",
-  "10월",
-  "11월",
-  "12월",
-];
+const MONTH_NAMES = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
 
 /* ── CalendarMonth ────────────────────────────── */
 interface CalendarMonthProps {
@@ -86,16 +64,8 @@ interface CalendarMonthProps {
   onHover: (date: string | null) => void;
 }
 
-function CalendarMonth({
-  year,
-  month,
-  range,
-  hoverDate,
-  onSelect,
-  onHover,
-}: CalendarMonthProps) {
-  const days = daysInMonth(year, month);
-  const offset = startDayOfMonth(year, month);
+function CalendarMonth({ year, month, range, hoverDate, onSelect, onHover }: CalendarMonthProps) {
+  const today = toKR(new Date());
 
   function isInRange(dateStr: string): boolean {
     if (!range.from) return false;
@@ -105,58 +75,39 @@ function CalendarMonth({
     return dateStr >= lo && dateStr <= hi;
   }
 
-  function isEnd(dateStr: string): boolean {
-    return dateStr === range.from || dateStr === range.to;
-  }
-
-  const cells: React.ReactNode[] = [];
-  for (let i = 0; i < offset; i++) {
-    cells.push(<div key={`e-${i}`} />);
-  }
-  for (let d = 1; d <= days; d++) {
-    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    const inRange = isInRange(dateStr);
-    const end = isEnd(dateStr);
-    const isToday = dateStr === toKR(new Date());
-
-    cells.push(
-      <button
-        key={dateStr}
-        type="button"
-        onClick={() => onSelect(dateStr)}
-        onMouseEnter={() => onHover(dateStr)}
-        onMouseLeave={() => onHover(null)}
-        className={`flex h-[28px] w-[28px] items-center justify-center rounded-md text-[12px] transition-colors ${
-          end
-            ? "bg-monitor-accent-blue font-semibold text-white"
-            : inRange
-              ? "text-monitor-accent-blue bg-[rgba(81,162,255,0.15)]"
-              : isToday
-                ? "text-monitor-accent-blue font-semibold"
-                : "text-monitor-text hover:bg-[rgba(255,255,255,0.06)]"
-        }`}
-      >
-        {d}
-      </button>,
-    );
-  }
-
   return (
     <div className="w-full sm:w-[224px]">
       <div className="text-monitor-text mb-2 text-center text-[13px] font-semibold">
         {year}년 {MONTH_NAMES[month]}
       </div>
-      <div className="grid grid-cols-7 gap-y-[2px] text-center">
-        {WEEKDAYS.map((w) => (
-          <div
-            key={w}
-            className="text-monitor-text-dim pb-1 text-[10px] font-medium"
-          >
-            {w}
-          </div>
-        ))}
-        {cells}
-      </div>
+      <CalendarGrid
+        year={year}
+        month={month}
+        renderDay={(dateStr) => {
+          const end = dateStr === range.from || dateStr === range.to;
+          const inRange = isInRange(dateStr);
+          const isToday = dateStr === today;
+          return (
+            <button
+              type="button"
+              onClick={() => onSelect(dateStr)}
+              onMouseEnter={() => onHover(dateStr)}
+              onMouseLeave={() => onHover(null)}
+              className={`mx-auto flex h-[28px] w-[28px] items-center justify-center rounded-md text-[12px] transition-colors ${
+                end
+                  ? "bg-monitor-accent-blue font-semibold text-white"
+                  : inRange
+                    ? "text-monitor-accent-blue bg-[rgba(81,162,255,0.15)]"
+                    : isToday
+                      ? "text-monitor-accent-blue font-semibold"
+                      : "text-monitor-text hover:bg-[rgba(255,255,255,0.06)]"
+              }`}
+            >
+              {dateStr.slice(8)}
+            </button>
+          );
+        }}
+      />
     </div>
   );
 }

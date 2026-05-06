@@ -1,40 +1,31 @@
-export type TransactionStatus = "normal" | "unpaid" | "refund";
-export type PaymentMethod = "card" | "cash" | "mobile";
+export type TransactionStatus = "normal" | "unpaid" | "mismatch";
+export type PaymentMethod = "card" | "cash" | "mobile" | "qr_code";
 
 export interface DateRange {
   from: string | null;
   to: string | null;
 }
 
-export type StatusFilterOption = "all" | "normal" | "unpaid" | "refund";
-export type PaymentFilterOption = "all" | "card" | "cash" | "mobile";
-
-export interface PurchaseItem {
-  name: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-}
+export type StatusFilterOption = "all" | "normal" | "unpaid" | "mismatch";
+export type PaymentFilterOption = "all" | "card" | "cash" | "mobile" | "qr_code";
 
 export interface PosTransaction {
   id: string;
+  eventId: number;
+  paymentId: number | null;
+  alertId: number | null;
   time: string;
   date: string;
-  paymentMethod: PaymentMethod;
-  /** null 이면 미결제 */
-  amount: number | null;
+  paymentMethod: PaymentMethod | null;
   status: TransactionStatus;
-  linkedEventId: string | null;
+  linkedPath: string | null;
   trackingId: string | null;
-  items: PurchaseItem[];
   note?: string;
 }
 
 export interface PosSummaryStats {
   totalCount: number;
-  normalAmount: number;
   normalCount: number;
   unpaidCount: number;
-  refundAmount: number;
-  refundCount: number;
+  mismatchCount: number;
 }
