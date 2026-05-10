@@ -6,25 +6,19 @@ const DESKTOP_PAGE_SIZE = 4;
 
 interface CameraGridProps {
   cameras: CameraFeed[];
+  isDesktop?: boolean;
 }
 
-export default function CameraGrid({ cameras }: CameraGridProps) {
-  return (
-    <>
-      {/* 모바일: 1개씩 스와이프 */}
-      <div className="flex h-full flex-col md:hidden">
-        <MobileCarousel cameras={cameras} />
-      </div>
+export default function CameraGrid({ cameras, isDesktop = true }: CameraGridProps) {
+  console.log("[CameraGrid] Rendering - isDesktop:", isDesktop, "cameras:", cameras.length);
 
-      {/* md+: 기존 그리드 레이아웃 */}
-      <div className="hidden h-full md:block">
-        <DesktopGrid cameras={cameras} />
-      </div>
-    </>
+  return isDesktop ? (
+    <DesktopGrid cameras={cameras} />
+  ) : (
+    <MobileCarousel cameras={cameras} />
   );
 }
 
-/* ── 모바일 캐러셀: 1개씩 페이지네이션 ───────── */
 function MobileCarousel({ cameras }: { cameras: CameraFeed[] }) {
   const [idx, setIdx] = useState(0);
   const count = cameras.length;
@@ -32,7 +26,7 @@ function MobileCarousel({ cameras }: { cameras: CameraFeed[] }) {
   if (count === 0) return null;
 
   return (
-    <>
+    <div className="flex h-full flex-col">
       <div className="min-h-0 flex-1 p-2">
         <CameraFeedCard camera={cameras[idx]} className="h-full" />
       </div>
@@ -77,11 +71,10 @@ function MobileCarousel({ cameras }: { cameras: CameraFeed[] }) {
           </span>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
-/* ── 데스크톱 그리드 ─────────────────────────── */
 function DesktopGrid({ cameras }: { cameras: CameraFeed[] }) {
   const count = cameras.length;
 
