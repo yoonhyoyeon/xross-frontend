@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 import type { CameraFeed } from "@/features/monitoring/types/monitoring.types";
-import CameraFeedLoading from "@/features/monitoring/components/CameraFeedLoading";
+import WebRTCVideoPlayer from "@/shared/components/WebRTCVideoPlayer";
 
 interface CameraFeedCardProps {
   camera: CameraFeed;
@@ -25,7 +25,7 @@ export default function CameraFeedCard({
       <div className="flex min-h-0 w-full flex-1 items-center justify-center">
         <div className="relative aspect-video w-full overflow-hidden bg-[#020618]">
           {camera.isOnline ? (
-            <CameraFeedLoading />
+            <WebRTCVideoPlayer streamPath={camera.id} className="h-full w-full" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#0f172b] to-[#020618]" />
           )}

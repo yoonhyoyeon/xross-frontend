@@ -12,7 +12,7 @@ import {
 import type { EventDetail } from "@/features/monitoring/types/monitoring.types";
 import type { EventSource } from "@/features/monitoring/api/monitoring.types";
 
-const SOURCE_CAMERA_NAME: Record<EventSource, string> = {
+const SOURCE_CAMERA_NAME: Record<EventSource, string> & Record<string, string> = {
   CEILING_CAMERA: "천장 카메라",
   FREEZER_CAMERA: "냉동고 카메라",
   WEIGHT_SENSOR: "무게 센서",
@@ -93,6 +93,7 @@ export default function EventDetailPage() {
 
       <main className="flex flex-1 flex-col overflow-auto md:flex-row md:overflow-hidden">
         <EventCCTVPlayer
+          cameraId={eventDetail.cameraId}
           cameraName={eventDetail.cameraName}
           timestamp={eventDetail.timestamp}
         />

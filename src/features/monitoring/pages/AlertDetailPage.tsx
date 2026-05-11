@@ -205,8 +205,8 @@ export default function AlertDetailPage() {
       <EventDetailHeader eventId={`ALERT #${alertId}`} />
 
       <main className="flex flex-1 flex-col overflow-auto md:flex-row md:overflow-hidden">
-        {/* 좌: CCTV */}
         <EventCCTVPlayer
+          cameraId={cameraSource}
           cameraName={
             EVENT_SOURCE_LABEL[cameraSource]?.label ?? cameraSource
           }

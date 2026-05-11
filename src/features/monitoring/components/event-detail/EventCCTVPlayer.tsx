@@ -1,13 +1,16 @@
 import SkipBackIcon from "@/assets/icons/skip-back.svg?react";
 import PauseIcon from "@/assets/icons/pause.svg?react";
 import SkipForwardIcon from "@/assets/icons/skip-forward.svg?react";
+import WebRTCVideoPlayer from "@/shared/components/WebRTCVideoPlayer";
 
 interface EventCCTVPlayerProps {
+  cameraId: string;
   cameraName: string;
   timestamp: string;
 }
 
 export default function EventCCTVPlayer({
+  cameraId,
   cameraName,
   timestamp,
 }: EventCCTVPlayerProps) {
@@ -16,10 +19,7 @@ export default function EventCCTVPlayer({
 
   return (
     <div className="border-monitor-border relative flex min-h-[250px] flex-1 overflow-hidden bg-black sm:min-h-[300px] md:border-r">
-      {/* 카메라 피드 영역 */}
-      <div className="absolute inset-0 bg-[#0f172b]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1a2744_0%,#0a0f1e_100%)]" />
-      </div>
+      <WebRTCVideoPlayer streamPath={cameraId} className="absolute inset-0" />
 
       {/* 상단 오버레이 — CameraFeedCard 스타일 */}
       <div className="absolute inset-x-0 top-0 flex items-start justify-between bg-linear-to-b from-black/80 to-transparent px-4 pt-4 pb-8">
