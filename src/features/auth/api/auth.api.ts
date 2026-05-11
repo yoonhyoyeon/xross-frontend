@@ -38,3 +38,20 @@ export async function loginApi(
 export async function getMeApi(): Promise<UserResponse> {
   return apiFetch<UserResponse>("/auth/me");
 }
+
+export interface UpdateProfileDto {
+  name?: string;
+  password?: string;
+  storeName?: string;
+  storeAddress?: string;
+  fcmToken?: string;
+}
+
+export async function updateProfileApi(
+  data: UpdateProfileDto,
+): Promise<UserResponse> {
+  return apiFetch<UserResponse>("/auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
