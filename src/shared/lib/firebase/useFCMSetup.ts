@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { requestFCMToken, getStoredFCMToken, setupForegroundNotifications } from "./fcm";
+import {
+  requestFCMToken,
+  getStoredFCMToken,
+  setupForegroundNotifications,
+} from "./fcm";
 import { updateProfileApi } from "@/features/auth/api/auth.api";
 
 export function useFCMSetup() {
@@ -15,14 +19,12 @@ export function useFCMSetup() {
       try {
         unsubscribe = await setupForegroundNotifications();
 
+        const storedToken = getStoredFCMToken();
         const newToken = await requestFCMToken();
         if (!newToken) return;
 
-        const storedToken = getStoredFCMToken();
-
         if (newToken !== storedToken) {
           await updateProfileApi({ fcmToken: newToken });
-          console.log("FCM token registered to server");
         }
       } catch (error) {
         console.error("Failed to initialize FCM:", error);

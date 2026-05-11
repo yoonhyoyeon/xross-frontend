@@ -26,6 +26,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearAuth: () => {
     localStorage.removeItem("xross_access_token");
     localStorage.removeItem("xross_store_id");
+    localStorage.removeItem("xross_fcm_token");
     set({ accessToken: null, storeId: null });
   },
 }));

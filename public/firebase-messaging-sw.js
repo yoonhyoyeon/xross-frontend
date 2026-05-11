@@ -20,8 +20,8 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = title || "알림";
   const notificationOptions = {
     body: message || "새로운 알림이 도착했습니다.",
-    icon: "/favicon.svg",
-    badge: "/favicon.svg",
+    icon: "/favicon.png",
+    badge: "/favicon.png",
     tag: priority || "default",
   };
 

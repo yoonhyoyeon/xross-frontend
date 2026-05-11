@@ -38,7 +38,6 @@ export async function requestFCMToken(): Promise<string | null> {
     const currentToken = await getToken(messaging, { vapidKey });
 
     if (currentToken) {
-      console.log("FCM token obtained:", currentToken);
       localStorage.setItem(STORAGE_KEY, currentToken);
       return currentToken;
     } else {
@@ -63,15 +62,13 @@ export async function setupForegroundNotifications(): Promise<() => void> {
     }
 
     const unsubscribe = onMessage(messaging, (payload) => {
-      console.log("Foreground notification received:", payload);
-
       const { title, message, priority } = payload.data ?? {};
 
       if (title && message) {
         new Notification(title, {
           body: message,
-          icon: "/favicon.svg",
-          badge: "/favicon.svg",
+          icon: "/favicon.png",
+          badge: "/favicon.png",
           tag: priority || "default",
         });
       }
