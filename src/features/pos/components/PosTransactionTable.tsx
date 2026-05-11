@@ -302,14 +302,14 @@ interface PosTransactionTableProps {
   isLoading?: boolean;
 }
 
-const COL_HEADERS = [
-  { label: "시각 / ID", align: "left" as const },
-  { label: "날짜", align: "left" as const },
-  { label: "상태", align: "left" as const },
-  { label: "추적 ID", align: "left" as const },
-  { label: "결제 수단", align: "left" as const },
-  { label: "결제", align: "left" as const },
-  { label: "", align: "left" as const },
+const COL_HEADERS: { label: string; align: "left" | "right" }[] = [
+  { label: "시각 / ID", align: "left" },
+  { label: "날짜", align: "left" },
+  { label: "상태", align: "left" },
+  { label: "추적 ID", align: "left" },
+  { label: "결제 수단", align: "left" },
+  { label: "결제", align: "right" },
+  { label: "", align: "left" },
 ];
 
 export default function PosTransactionTable({

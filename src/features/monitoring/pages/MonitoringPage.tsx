@@ -25,7 +25,7 @@ const MOBILE_TABS: {
   { key: "events", label: "탐지 로그", Icon: LogsIcon },
 ];
 
-function buildStats(events: EventResponse[]) {
+function buildStats(events: EventResponse[], alertCount: number) {
   return [
     {
       label: "총 입장",
@@ -37,16 +37,12 @@ function buildStats(events: EventResponse[]) {
     },
     {
       label: "이상 감지",
-      value: String(events.filter((e) => e.type === "ALERT").length),
+      value: String(alertCount),
       variant: "danger" as const,
     },
     {
       label: "결제 완료",
-      value: String(
-        events.filter(
-          (e) => e.type === "PAYMENT" || e.type === "PAYMENT_RECEIVED",
-        ).length,
-      ),
+      value: String(events.filter((e) => e.type === "PAYMENT_RECEIVED").length),
       variant: "success" as const,
     },
   ];
@@ -76,7 +72,7 @@ function buildChartData(
       time: `${h}시`,
       picks: inRange.filter((e) => e.type === "PICK").length,
       suspicions: inRange.filter(
-        (e) => e.type === "ALERT" || e.type === "WEIGHT_CHANGE",
+        (e) => e.type === "UNPAID_SUSPICIOUS" || e.type === "PAYMENT_MISMATCH",
       ).length,
     };
   });
@@ -93,7 +89,7 @@ export default function MonitoringPage() {
   const criticalCount = alerts.filter(
     (a) => a.status === "PENDING" || a.status === "SENT",
   ).length;
-  const stats = buildStats(events);
+  const stats = buildStats(events, alerts.length);
   const chartData = buildChartData(events, selectedDate);
 
   return (

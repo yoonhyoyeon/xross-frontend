@@ -52,7 +52,7 @@ export function getAlertSeverity(priority: AlertPriority): "critical" | "warning
 
 function getSeverity(type: EventType): EventSeverity {
   if (type === "UNPAID_SUSPICIOUS" || type === "FALL_DETECTED") return "critical";
-  if (type === "PICK" || type === "WEIGHT_CHANGE" || type === "PAYMENT_MISMATCH" || type === "EXIT_LINE_CROSSED") return "warning";
+  if (type === "PICK" || type === "PAYMENT_MISMATCH" || type === "EXIT_LINE_CROSSED") return "warning";
   return "info";
 }
 
