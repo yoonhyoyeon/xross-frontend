@@ -44,7 +44,6 @@ export interface UpdateProfileDto {
   password?: string;
   storeName?: string;
   storeAddress?: string;
-  fcmToken?: string;
 }
 
 export async function updateProfileApi(
@@ -53,5 +52,25 @@ export async function updateProfileApi(
   return apiFetch<UserResponse>("/auth/me", {
     method: "PATCH",
     body: JSON.stringify(data),
+  });
+}
+
+export interface FcmTokenResponse {
+  success: boolean;
+  message: string;
+  fcmToken: string;
+}
+
+export async function registerFcmTokenApi(fcmToken: string): Promise<FcmTokenResponse> {
+  return apiFetch<FcmTokenResponse>("/auth/fcm-token", {
+    method: "POST",
+    body: JSON.stringify({ fcmToken }),
+  });
+}
+
+export async function removeFcmTokenApi(fcmToken: string): Promise<FcmTokenResponse> {
+  return apiFetch<FcmTokenResponse>("/auth/fcm-token/remove", {
+    method: "POST",
+    body: JSON.stringify({ fcmToken }),
   });
 }

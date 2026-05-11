@@ -5,7 +5,7 @@ import {
   getStoredFCMToken,
   setupForegroundNotifications,
 } from "./fcm";
-import { updateProfileApi } from "@/features/auth/api/auth.api";
+import { registerFcmTokenApi } from "@/features/auth/api/auth.api";
 
 export function useFCMSetup() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -24,7 +24,7 @@ export function useFCMSetup() {
         if (!newToken) return;
 
         if (newToken !== storedToken) {
-          await updateProfileApi({ fcmToken: newToken });
+          await registerFcmTokenApi(newToken);
         }
       } catch (error) {
         console.error("Failed to initialize FCM:", error);
