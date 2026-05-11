@@ -55,14 +55,14 @@ export function getStoredFCMToken(): string | null {
   return localStorage.getItem(STORAGE_KEY);
 }
 
-export async function setupForegroundNotifications() {
+export async function setupForegroundNotifications(): Promise<() => void> {
   try {
     const messaging = await getMessagingInstance();
     if (!messaging) {
-      return;
+      return () => {};
     }
 
-    onMessage(messaging, (payload) => {
+    const unsubscribe = onMessage(messaging, (payload) => {
       console.log("Foreground notification received:", payload);
 
       const { title, message, priority } = payload.data ?? {};
@@ -76,7 +76,10 @@ export async function setupForegroundNotifications() {
         });
       }
     });
+
+    return unsubscribe;
   } catch (error) {
     console.error("Failed to setup foreground notifications:", error);
+    return () => {};
   }
 }

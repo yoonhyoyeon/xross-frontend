@@ -15,9 +15,11 @@ function App() {
   useEffect(() => {
     if (!accessToken) return;
 
+    let unsubscribe: () => void;
+
     const initializeFCM = async () => {
       try {
-        await setupForegroundNotifications();
+        unsubscribe = await setupForegroundNotifications();
 
         const newToken = await requestFCMToken();
         if (!newToken) return;
@@ -34,6 +36,8 @@ function App() {
     };
 
     initializeFCM();
+
+    return () => unsubscribe?.();
   }, [accessToken]);
 
   return useRoutes(routes);
